@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+<meta name="theme-color" content="#1a4a7a"/>
+<title>Checkout — HealthBuddy</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = { theme: { extend: {
+    fontFamily: { sans: ['Inter', 'sans-serif'] },
+    colors: { navy:'#1a4a7a', blue:'#2b8bc9', green:'#3aa76d', lime:'#7fc341',
+      slate:'#5b6b75', mist:'#f7f9fb', cloud:'#ffffff', line:'#e4eaf0', tint:'#eef5f9', deep:'#0d2f4d' },
+    letterSpacing: { micro: '0.16em' },
+    screens: { 'xs': '480px' }
+  }}}
+</script>
+<style>
+  html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
+  body { font-feature-settings: "ss01","cv11"; }
+  .display-md { font-weight: 700; letter-spacing: -0.03em; line-height: 1.1; font-size: clamp(1.5rem, 4vw, 2.25rem); }
+  .micro { font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; font-weight: 600; }
+  @media (max-width: 480px) { .micro { font-size: 10px; letter-spacing: 0.14em; } }
+  .gradient-text { background: linear-gradient(120deg, #2b8bc9 0%, #3aa76d 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .gradient-brand { background: linear-gradient(120deg, #2b8bc9 0%, #3aa76d 100%); }
+  .rule { border-top: 1px solid #e4eaf0; }
+  .btn-primary, .btn-outline {
+    position: relative; overflow: hidden; z-index: 1; border-radius: 6px; min-height: 44px;
+    transition: color .5s cubic-bezier(.22,1,.36,1);
+  }
+  .btn-primary { background: #1a4a7a; color: #fff; }
+  .btn-primary::before { content:''; position: absolute; inset: 0; background: linear-gradient(120deg, #2b8bc9 0%, #3aa76d 100%); transform: translateY(101%); transition: transform .6s cubic-bezier(.22,1,.36,1); z-index: -1; }
+  .btn-primary:hover::before { transform: translateY(0); }
+  .btn-outline { border: 1.5px solid #1a4a7a; color: #1a4a7a; background: transparent; }
+  .btn-outline::before { content:''; position: absolute; inset: 0; background: #1a4a7a; transform: translateY(101%); transition: transform .6s cubic-bezier(.22,1,.36,1); z-index: -1; }
+  .btn-outline:hover { color: #fff; }
+  .btn-outline:hover::before { transform: translateY(0); }
+  .hover-underline { background-image: linear-gradient(currentColor, currentColor); background-size: 0% 1px; background-repeat: no-repeat; background-position: 0 100%; transition: background-size .5s cubic-bezier(.22,1,.36,1); padding-bottom: 2px; }
+  .hover-underline:hover { background-size: 100% 1px; }
+  .nav-scrolled { background: rgba(255,255,255,.94); backdrop-filter: blur(14px); border-bottom-color: #e4eaf0; box-shadow: 0 1px 0 rgba(26,74,122,.04); }
+  .mobile-menu { position: fixed; inset: 0; background: #fff; z-index: 100; transform: translateX(100%); transition: transform .5s cubic-bezier(.22,1,.36,1); display: flex; flex-direction: column; padding: 24px; overflow-y: auto; }
+  .mobile-menu.is-open { transform: translateX(0); }
+  .mobile-menu-backdrop { position: fixed; inset: 0; background: rgba(13,47,77,.4); backdrop-filter: blur(4px); z-index: 99; opacity: 0; pointer-events: none; transition: opacity .4s ease; }
+  .mobile-menu-backdrop.is-open { opacity: 1; pointer-events: auto; }
+  .mobile-menu a { display: block; padding: 18px 0; border-bottom: 1px solid #e4eaf0; font-size: 20px; font-weight: 600; color: #1a4a7a; }
+  body.menu-open { overflow: hidden; }
+  .hamburger span { display: block; width: 22px; height: 2px; background: #1a4a7a; border-radius: 2px; transition: all .4s cubic-bezier(.22,1,.36,1); }
+  .hamburger span + span { margin-top: 5px; }
+  .hamburger.is-open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .hamburger.is-open span:nth-child(2) { opacity: 0; }
+  .hamburger.is-open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+  .accent-dot { display: inline-block; width: 6px; height: 6px; border-radius: 999px; background: linear-gradient(120deg, #2b8bc9, #3aa76d); flex-shrink: 0; }
+
+  /* Form */
+  .field-label { display: block; font-size: 12px; font-weight: 600; color: #1a4a7a; margin-bottom: 8px; }
+  .field-input, .field-select, .field-textarea { width: 100%; background: #fff; border: 1.5px solid #e4eaf0; border-radius: 8px; padding: 14px 16px; font-size: 14px; color: #1a4a7a; outline: none; transition: all .3s; }
+  .field-input:focus, .field-select:focus, .field-textarea:focus { border-color: #2b8bc9; box-shadow: 0 0 0 4px rgba(43,139,201,.08); }
+  .field-textarea { resize: vertical; min-height: 100px; line-height: 1.65; }
+  .field-select { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%235b6b75' stroke-width='2'%3E%3Cpath d='M19 9l-7 7-7-7'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 16px center; padding-right: 44px; cursor: pointer; }
+
+  /* Radio card (payment) */
+  .pay-option { display: block; cursor: pointer; }
+  .pay-option input { display: none; }
+  .pay-option .pay-inner {
+    display: flex; align-items: center; gap: 14px;
+    padding: 16px; border: 1.5px solid #e4eaf0; border-radius: 12px;
+    background: #fff; transition: all .3s cubic-bezier(.22,1,.36,1);
+  }
+  .pay-option:hover .pay-inner { border-color: rgba(26,74,122,.3); }
+  .pay-option input:checked + .pay-inner { border-color: #1a4a7a; background: #eef5f9; }
+  .pay-radio {
+    width: 20px; height: 20px; border-radius: 50%;
+    border: 2px solid #e4eaf0; display: flex; align-items: center; justify-content: center;
+    transition: all .3s ease; flex-shrink: 0; background: #fff;
+  }
+  .pay-option input:checked + .pay-inner .pay-radio { border-color: #1a4a7a; }
+  .pay-option input:checked + .pay-inner .pay-radio::after {
+    content: ''; width: 10px; height: 10px; border-radius: 50%;
+    background: linear-gradient(120deg, #2b8bc9, #3aa76d);
+  }
+
+  /* Field group with radio */
+  .toggle-group { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .toggle-opt { position: relative; }
+  .toggle-opt input { display: none; }
+  .toggle-opt .toggle-inner {
+    padding: 12px; text-align: center; font-size: 13px; font-weight: 600;
+    color: #5b6b75; border: 1.5px solid #e4eaf0; border-radius: 8px;
+    background: #fff; transition: all .3s ease; cursor: pointer;
+  }
+  .toggle-opt input:checked + .toggle-inner { border-color: #1a4a7a; background: #eef5f9; color: #1a4a7a; }
+
+  /* Success overlay */
+  .success-overlay {
+    position: fixed; inset: 0; background: rgba(13,47,77,.6); backdrop-filter: blur(8px);
+    z-index: 200; display: none; align-items: center; justify-content: center; padding: 20px;
+  }
+  .success-overlay.show { display: flex; animation: fadeIn .4s ease; }
+  .success-card {
+    background: #fff; border-radius: 20px; padding: 40px 32px; max-width: 440px; width: 100%;
+    text-align: center; animation: popIn .5s cubic-bezier(.22,1,.36,1);
+  }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes popIn { from { opacity: 0; transform: scale(.9); } to { opacity: 1; transform: scale(1); } }
+
+  @media (prefers-reduced-motion: reduce) { * { animation-duration: .01ms !important; transition-duration: .01ms !important; } }
+</style>
+</head>
+
+<body class="bg-mist text-navy font-sans">
+
+<!-- TOP BAR -->
+<div class="bg-navy text-white/85">
+  <div class="max-w-[1280px] mx-auto px-4 xs:px-5 sm:px-6 lg:px-10 py-2.5 flex items-center justify-between gap-4">
+    <p class="micro text-white/75 truncate">🔒 Secure checkout</p>
+    <div class="hidden sm:flex items-center gap-6 lg:gap-8 shrink-0">
+      <a href="#" class="micro text-white/75 hover:text-white">Need help?</a>
+    </div>
+  </div>
+</div>
+
+<!-- NAVBAR -->
+<header id="nav" class="bg-white/80 backdrop-blur-md sticky top-0 z-50 border-b border-transparent transition-all duration-500">
+  <div class="max-w-[1280px] mx-auto px-4 xs:px-5 sm:px-6 lg:px-10 flex items-center justify-between h-[72px] sm:h-[80px] lg:h-[84px] gap-4">
+    <a href="index.html" class="flex items-center gap-2.5 sm:gap-3 group shrink-0 min-w-0">
+      <svg viewBox="0 0 100 100" class="w-8 h-8 sm:w-9 sm:h-9 lg:w-10 lg:h-10 transition-transform duration-700 group-hover:rotate-[6deg] shrink-0">
+        <defs><linearGradient id="hb" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#2b8bc9"/><stop offset="100%" stop-color="#3aa76d"/></linearGradient></defs>
+        <path d="M38 8 h24 a6 6 0 0 1 6 6 v18 h18 a6 6 0 0 1 6 6 v24 a6 6 0 0 1 -6 6 H68 v18 a6 6 0 0 1 -6 6 H38 a6 6 0 0 1 -6 -6 V68 H14 a6 6 0 0 1 -6 -6 V38 a6 6 0 0 1 6 -6 h18 V14 a6 6 0 0 1 6 -6 z" fill="url(#hb)"/>
+        <circle cx="50" cy="34" r="6" fill="white"/>
+        <path d="M32 44 Q40 40 46 46 M68 44 Q60 40 54 46" stroke="white" stroke-width="4" stroke-linecap="round" fill="none"/>
+        <path d="M44 60 Q58 52 66 62 Q64 74 50 74 Q44 68 44 60 z" fill="#7fc341"/>
+      </svg>
+      <div class="leading-none min-w-0">
+        <div class="text-[18px] sm:text-[20px] lg:text-[24px] font-extrabold tracking-tight whitespace-nowrap"><span class="text-navy">Health</span><span class="text-green">Buddy</span></div>
+        <div class="micro text-slate mt-1 hidden xs:block" style="font-size:8.5px;">Better Health · Happier You</div>
+      </div>
+    </a>
+    <a href="cart.html" class="text-[13px] font-semibold text-slate hover:text-navy transition inline-flex items-center gap-2">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7 16l-4-4m0 0l4-4m-4 4h18"/></svg>
+      Back to cart
+    </a>
+  </div>
+</header>
+
+<!-- PAGE HEADER -->
+<section class="bg-white border-b border-line">
+  <div class="max-w-[1280px] mx-auto px-4 xs:px-5 sm:px-6 lg:px-10 pt-8 sm:pt-10 lg:pt-12 pb-8 sm:pb-10">
+    <nav class="flex items-center gap-2 text-[12px] sm:text-[13px] text-slate mb-5">
+      <a href="cart.html" class="hover:text-navy">Cart</a><span class="text-slate/50">/</span><span class="text-navy font-medium">Checkout</span>
+    </nav>
+    <div class="inline-flex items-center gap-2.5 mb-4"><span class="accent-dot"></span><span class="micro text-green">Secure Checkout</span></div>
+    <h1 class="display-md text-navy">Almost there.</h1>
+  </div>
+</section>
+
+<!-- CHECKOUT -->
+<section class="bg-mist border-b border-line">
+  <div class="max-w-[1280px] mx-auto px-4 xs:px-5 sm:px-6 lg:px-10 py-10 sm:py-12 lg:py-14">
+    <div class="grid lg:grid-cols-12 gap-8 lg:gap-10">
+
+      <!-- LEFT COLUMN -->
+      <div class="lg:col-span-7 space-y-5">
+
+        <!-- CONTACT INFO -->
+        <div class="bg-white rounded-2xl border border-line p-6 sm:p-7">
+          <div class="flex items-center gap-3 mb-6">
+            <span class="w-8 h-8 rounded-full gradient-brand flex items-center justify-center text-white text-[13px] font-bold">1</span>
+            <h2 class="text-[17px] font-bold text-navy">Contact information</h2>
+          </div>
+
+          <div class="grid sm:grid-cols-2 gap-4 mb-4">
+            <div><label class="field-label">First name</label><input class="field-input" type="text" placeholder="Adaeze"/></div>
+            <div><label class="field-label">Last name</label><input class="field-input" type="text" placeholder="Bankole"/></div>
+          </div>
+
+          <div class="grid sm:grid-cols-2 gap-4">
+            <div><label class="field-label">Email</label><input class="field-input" type="email" placeholder="you@example.com"/></div>
+            <div><label class="field-label">Phone</label><input class="field-input" type="tel" placeholder="+234 801 234 5678"/></div>
+          </div>
+        </div>
+
+        <!-- SHIPPING -->
+        <div class="bg-white rounded-2xl border border-line p-6 sm:p-7">
+          <div class="flex items-center gap-3 mb-6">
+            <span class="w-8 h-8 rounded-full gradient-brand flex items-center justify-center text-white text-[13px] font-bold">2</span>
+            <h2 class="text-[17px] font-bold text-navy">Shipping address</h2>
+          </div>
+
+          <div class="mb-4">
+            <label class="field-label">Street address</label>
+            <input class="field-input" type="text" placeholder="12 Admiralty Way"/>
+          </div>
+
+          <div class="mb-4">
+            <label class="field-label">Apartment, suite, etc. (optional)</label>
+            <input class="field-input" type="text" placeholder="Flat 4B"/>
+          </div>
+
+          <div class="grid sm:grid-cols-3 gap-4 mb-4">
+            <div>
+              <label class="field-label">City</label>
+              <input class="field-input" type="text" placeholder="Lagos"/>
+            </div>
+            <div>
+              <label class="field-label">State</label>
+              <select class="field-select">
+                <option>Lagos</option>
+                <option>Abuja FCT</option>
+                <option>Rivers</option>
+                <option>Kano</option>
+                <option>Oyo</option>
+              </select>
+            </div>
+            <div>
+              <label class="field-label">Postal code</label>
+              <input class="field-input" type="text" placeholder="106104"/>
+            </div>
+          </div>
+
+          <label class="flex items-center gap-3 mt-5 cursor-pointer">
+            <input type="checkbox" class="w-4 h-4 accent-navy" style="accent-color: #1a4a7a;"/>
+            <span class="text-[13px] text-slate">Save this address for next time</span>
+          </label>
+        </div>
+
+        <!-- SHIPPING METHOD -->
+        <div class="bg-white rounded-2xl border border-line p-6 sm:p-7">
+          <div class="flex items-center gap-3 mb-6">
+            <span class="w-8 h-8 rounded-full gradient-brand flex items-center justify-center text-white text-[13px] font-bold">3</span>
+            <h2 class="text-[17px] font-bold text-navy">Shipping method</h2>
+          </div>
+
+          <div class="space-y-3">
+            <label class="pay-option">
+              <input type="radio" name="ship" checked/>
+              <div class="pay-inner">
+                <span class="pay-radio"></span>
+                <div class="flex-1">
+                  <p class="text-[14px] font-bold text-navy">Standard delivery</p>
+                  <p class="text-[12px] text-slate mt-0.5">2–3 business days</p>
+                </div>
+                <span class="text-[14px] font-bold text-navy">₦1,500</span>
+              </div>
+            </label>
+            <label class="pay-option">
+              <input type="radio" name="ship"/>
+              <div class="pay-inner">
+                <span class="pay-radio"></span>
+                <div class="flex-1">
+                  <p class="text-[14px] font-bold text-navy">Express delivery</p>
+                  <p class="text-[12px] text-slate mt-0.5">Within 24 hours (Lagos only)</p>
+                </div>
+                <span class="text-[14px] font-bold text-navy">₦3,500</span>
+              </div>
+            </label>
+            <label class="pay-option">
+              <input type="radio" name="ship"/>
+              <div class="pay-inner">
+                <span class="pay-radio"></span>
+                <div class="flex-1">
+                  <p class="text-[14px] font-bold text-navy">Pickup at Lekki HQ</p>
+                  <p class="text-[12px] text-slate mt-0.5">Ready in 3 hours</p>
+                </div>
+                <span class="text-[14px] font-bold text-green">Free</span>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <!-- PAYMENT -->
+        <div class="bg-white rounded-2xl border border-line p-6 sm:p-7">
+          <div class="flex items-center gap-3 mb-6">
+            <span class="w-8 h-8 rounded-full gradient-brand flex items-center justify-center text-white text-[13px] font-bold">4</span>
+            <h2 class="text-[17px] font-bold text-navy">Payment</h2>
+          </div>
+
+          <div class="space-y-3 mb-6">
+            <label class="pay-option">
+              <input type="radio" name="pay" checked onchange="showCard(true)"/>
+              <div class="pay-inner">
+                <span class="pay-radio"></span>
+                <div class="flex-1 flex items-center gap-3">
+                  <svg class="w-6 h-6 text-navy" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z"/></svg>
+                  <p class="text-[14px] font-bold text-navy">Credit / Debit card</p>
+                </div>
+              </div>
+            </label>
+            <label class="pay-option">
+              <input type="radio" name="pay" onchange="showCard(false)"/>
+              <div class="pay-inner">
+                <span class="pay-radio"></span>
+                <div class="flex-1 flex items-center gap-3">
+                  <svg class="w-6 h-6 text-navy" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75a60.07 60.07 0 0115.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 013 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 00-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 01-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 003 15h-.75M15 10.5a3 3 0 11-6 0 3 3 0 016 0zm3 0h.008v.008H18V10.5zm-12 0h.008v.008H6V10.5z"/></svg>
+                  <p class="text-[14px] font-bold text-navy">Bank transfer</p>
+                </div>
+              </div>
+            </label>
+            <label class="pay-option">
+              <input type="radio" name="pay" onchange="showCard(false)"/>
+              <div class="pay-inner">
+                <span class="pay-radio"></span>
+                <div class="flex-1 flex items-center gap-3">
+                  <svg class="w-6 h-6 text-navy" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 1.5H8.25A2.25 2.25 0 006 3.75v16.5a2.25 2.25 0 002.25 2.25h7.5A2.25 2.25 0 0018 20.25V3.75a2.25 2.25 0 00-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3"/></svg>
+                  <p class="text-[14px] font-bold text-navy">USSD</p>
+                </div>
+              </div>
+            </label>
+          </div>
+
+          <!-- Card fields -->
+          <div id="cardFields" class="pt-6 rule">
+            <div class="mb-4">
+              <label class="field-label">Card number</label>
+              <input class="field-input" type="text" placeholder="1234 5678 9012 3456" maxlength="19"/>
+            </div>
+            <div class="grid grid-cols-3 gap-4 mb-4">
+              <div><label class="field-label">Month</label><input class="field-input" type="text" placeholder="MM" maxlength="2"/></div>
+              <div><label class="field-label">Year</label><input class="field-input" type="text" placeholder="YY" maxlength="2"/></div>
+              <div><label class="field-label">CVV</label><input class="field-input" type="text" placeholder="123" maxlength="4"/></div>
+            </div>
+            <div>
+              <label class="field-label">Name on card</label>
+              <input class="field-input" type="text" placeholder="Adaeze Bankole"/>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- RIGHT: ORDER SUMMARY -->
+      <aside class="lg:col-span-5">
+        <div class="lg:sticky lg:top-[104px] space-y-4">
+
+          <div class="bg-white rounded-2xl border border-line p-6">
+            <h3 class="text-[15px] font-bold text-navy mb-5">Order summary</h3>
+
+            <!-- Items -->
+            <div class="space-y-4 pb-5 mb-5 border-b border-line">
+              <div class="flex items-center gap-3">
+                <div class="w-14 h-14 rounded-lg overflow-hidden bg-mist shrink-0 relative">
+                  <img src="https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=200" class="w-full h-full object-cover" alt="Item"/>
+                  <span class="absolute -top-1 -right-1 w-5 h-5 bg-navy text-white text-[10px] font-bold rounded-full flex items-center justify-center">1</span>
+                </div>
+                <div class="flex-1 min-w-0">
+                  <p class="text-[13px] font-bold text-navy truncate">Vitamin D3 Complex</p>
+                  <p class="text-[11px] text-slate">60 softgels</p>
+                </div>
+                <p class="text-[13px] font-bold text-navy">₦12,500</p>
+              </div>
+
+              <div class="flex items-center gap-3">
+                <div class="w-14 h-14 rounded-lg overflow-hidden bg-mist shrink-0 relative">
+                  <img src="https://images.unsplash.com/photo-1550572017-edd951aa8f72?w=200" class="w-full h-full object-cover" alt="Item"/>
+                  <span class="absolute -top-1 -right-1 w-5 h-5 bg-navy text-white text-[10px] font-bold rounded-full flex items-center justify-center">1</span>
+                </div>
+                <div class="flex-1 min-w-0">
+                  <p class="text-[13px] font-bold text-navy truncate">Omega-3 Fish Oil</p>
+                  <p class="text-[11px] text-slate">90 capsules</p>
+                </div>
+                <p class="text-[13px] font-bold text-navy">₦8,900</p>
+              </div>
+
+              <div class="flex items-center gap-3">
+                <div class="w-14 h-14 rounded-lg overflow-hidden bg-mist shrink-0 relative">
+                  <img src="https://images.unsplash.com/photo-1607619056574-7b8d3ee536b2?w=200" class="w-full h-full object-cover" alt="Item"/>
+                  <span class="absolute -top-1 -right-1 w-5 h-5 bg-navy text-white text-[10px] font-bold rounded-full flex items-center justify-center">1</span>
+                </div>
+                <div class="flex-1 min-w-0">
+                  <p class="text-[13px] font-bold text-navy truncate">Herbal Detox Tea</p>
+                  <p class="text-[11px] text-slate">30 tea bags</p>
+                </div>
+                <p class="text-[13px] font-bold text-navy">₦5,200</p>
+              </div>
+            </div>
+
+            <div class="space-y-3 text-[14px] mb-5">
+              <div class="flex items-center justify-between"><span class="text-slate">Subtotal</span><span class="font-semibold text-navy">₦26,600</span></div>
+              <div class="flex items-center justify-between"><span class="text-slate">Shipping</span><span class="font-semibold text-navy">₦1,500</span></div>
+              <div class="flex items-center justify-between"><span class="text-slate">VAT (7.5%)</span><span class="font-semibold text-navy">₦1,995</span></div>
+            </div>
+
+            <div class="pt-5 border-t border-line flex items-center justify-between mb-6">
+              <span class="text-[15px] font-bold text-navy">Total</span>
+              <span class="text-[24px] font-extrabold gradient-text">₦30,095</span>
+            </div>
+
+            <button onclick="showSuccess()" class="btn-primary w-full py-4 text-[14px] font-bold inline-flex items-center justify-center gap-2">
+              Place Order — ₦30,095
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z"/></svg>
+            </button>
+
+            <p class="text-[11px] text-slate text-center mt-4 leading-[1.6]">
+              By placing your order, you agree to our <a href="#" class="text-blue hover-underline font-medium">terms</a> and <a href="#" class="text-blue hover-underline font-medium">privacy policy</a>.
+            </p>
+          </div>
+
+          <div class="bg-tint rounded-2xl p-5 space-y-3">
+            <div class="flex items-center gap-3 text-[12px] text-slate">
+              <svg class="w-4 h-4 text-green shrink-0" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              Encrypted &amp; secure payment
+            </div>
+            <div class="flex items-center gap-3 text-[12px] text-slate">
+              <svg class="w-4 h-4 text-green shrink-0" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99"/></svg>
+              7-day easy returns
+            </div>
+            <div class="flex items-center gap-3 text-[12px] text-slate">
+              <svg class="w-4 h-4 text-green shrink-0" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 18.75a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 01-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124a17.902 17.902 0 00-3.213-9.193 2.056 2.056 0 00-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 00-10.026 0 1.106 1.106 0 00-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12"/></svg>
+              Nationwide delivery
+            </div>
+          </div>
+
+        </div>
+      </aside>
+
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="bg-deep text-white">
+  <div class="max-w-[1280px] mx-auto px-4 xs:px-5 sm:px-6 lg:px-10 py-12 sm:py-14">
+    <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <svg viewBox="0 0 100 100" class="w-8 h-8">
+          <defs><linearGradient id="hb-footer" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#2b8bc9"/><stop offset="100%" stop-color="#3aa76d"/></linearGradient></defs>
+          <path d="M38 8 h24 a6 6 0 0 1 6 6 v18 h18 a6 6 0 0 1 6 6 v24 a6 6 0 0 1 -6 6 H68 v18 a6 6 0 0 1 -6 6 H38 a6 6 0 0 1 -6 -6 V68 H14 a6 6 0 0 1 -6 -6 V38 a6 6 0 0 1 6 -6 h18 V14 a6 6 0 0 1 6 -6 z" fill="url(#hb-footer)"/>
+          <circle cx="50" cy="34" r="6" fill="#0d2f4d"/><path d="M32 44 Q40 40 46 46 M68 44 Q60 40 54 46" stroke="#0d2f4d" stroke-width="4" stroke-linecap="round" fill="none"/><path d="M44 60 Q58 52 66 62 Q64 74 50 74 Q44 68 44 60 z" fill="#7fc341"/>
+        </svg>
+        <div class="text-[18px] font-extrabold"><span class="text-white">Health</span><span class="text-lime">Buddy</span></div>
+      </div>
+      <p class="micro text-white/40">© 2026 HealthBuddy — All rights reserved</p>
+    </div>
+  </div>
+</footer>
+
+<!-- SUCCESS OVERLAY -->
+<div id="successOverlay" class="success-overlay">
+  <div class="success-card">
+    <div class="w-16 h-16 rounded-full gradient-brand flex items-center justify-center text-white mx-auto mb-6 shadow-lg">
+      <svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg>
+    </div>
+    <h2 class="text-[24px] font-extrabold text-navy mb-3">Order confirmed</h2>
+    <p class="text-slate text-[14px] leading-[1.7] mb-6">
+      Thank you — your order <span class="font-bold text-navy">#HB-2041</span> is being prepared. We've sent a confirmation to your email.
+    </p>
+    <div class="flex flex-col sm:flex-row gap-3">
+      <a href="index.html" class="btn-outline flex-1 py-3 text-[13px] font-semibold text-center">Back home</a>
+      <a href="dashboard.html" class="btn-primary flex-1 py-3 text-[13px] font-semibold text-center">View order</a>
+    </div>
+  </div>
+</div>
+
+<script>
+  function showCard(show) {
+    const el = document.getElementById('cardFields');
+    el.style.display = show ? 'block' : 'none';
+  }
+
+  function showSuccess() {
+    document.getElementById('successOverlay').classList.add('show');
+  }
+
+  document.getElementById('successOverlay').addEventListener('click', (e) => {
+    if (e.target.id === 'successOverlay') {
+      document.getElementById('successOverlay').classList.remove('show');
+    }
+  });
+
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => nav.classList.toggle('nav-scrolled', window.scrollY > 30), { passive: true });
+</script>
+</body>
+</html>
