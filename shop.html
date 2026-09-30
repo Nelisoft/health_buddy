@@ -1,0 +1,1448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+<meta name="theme-color" content="#1a4a7a"/>
+<title>Shop — HealthBuddy</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        fontFamily: { sans: ['Inter', 'sans-serif'] },
+        colors: {
+          navy:  '#1a4a7a',
+          blue:  '#2b8bc9',
+          green: '#3aa76d',
+          lime:  '#7fc341',
+          slate: '#5b6b75',
+          mist:  '#f7f9fb',
+          cloud: '#ffffff',
+          line:  '#e4eaf0',
+          tint:  '#eef5f9',
+          deep:  '#0d2f4d',
+        },
+        letterSpacing: { micro: '0.16em' },
+        screens: { 'xs': '480px' }
+      }
+    }
+  }
+</script>
+
+<style>
+  html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
+  body { font-feature-settings: "ss01","cv11","cv02"; }
+
+  .display-md {
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    font-size: clamp(1.75rem, 4.5vw, 2.75rem);
+  }
+  .display-sm {
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    line-height: 1.15;
+    font-size: clamp(1.35rem, 3vw, 1.75rem);
+  }
+
+  .micro {
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+  @media (max-width: 480px) {
+    .micro { font-size: 10px; letter-spacing: 0.14em; }
+  }
+
+  .gradient-text {
+    background: linear-gradient(120deg, #2b8bc9 0%, #3aa76d 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .gradient-brand { background: linear-gradient(120deg, #2b8bc9 0%, #3aa76d 100%); }
+
+  .rule { border-top: 1px solid #e4eaf0; }
+
+  /* Buttons */
+  .btn-primary {
+    position: relative; overflow: hidden;
+    background: #1a4a7a; color: #fff;
+    transition: color .5s cubic-bezier(.22,1,.36,1);
+    z-index: 1;
+    border-radius: 6px;
+    min-height: 44px;
+  }
+  .btn-primary::before {
+    content:''; position: absolute; inset: 0;
+    background: linear-gradient(120deg, #2b8bc9 0%, #3aa76d 100%);
+    transform: translateY(101%);
+    transition: transform .6s cubic-bezier(.22,1,.36,1);
+    z-index: -1;
+  }
+  .btn-primary:hover::before { transform: translateY(0); }
+
+  .btn-outline {
+    position: relative; overflow: hidden;
+    border: 1.5px solid #1a4a7a; color: #1a4a7a;
+    background: transparent;
+    transition: color .5s cubic-bezier(.22,1,.36,1);
+    z-index: 1;
+    border-radius: 6px;
+    min-height: 44px;
+  }
+  .btn-outline::before {
+    content:''; position: absolute; inset: 0;
+    background: #1a4a7a;
+    transform: translateY(101%);
+    transition: transform .6s cubic-bezier(.22,1,.36,1);
+    z-index: -1;
+  }
+  .btn-outline:hover { color: #fff; }
+  .btn-outline:hover::before { transform: translateY(0); }
+
+  .hover-underline {
+    background-image: linear-gradient(currentColor, currentColor);
+    background-size: 0% 1px;
+    background-repeat: no-repeat;
+    background-position: 0 100%;
+    transition: background-size .5s cubic-bezier(.22,1,.36,1);
+    padding-bottom: 2px;
+  }
+  .hover-underline:hover { background-size: 100% 1px; }
+
+  .img-zoom img { transition: transform 1.6s cubic-bezier(.22,1,.36,1); }
+  @media (hover: hover) {
+    .img-zoom:hover img { transform: scale(1.06); }
+  }
+
+  /* Nav scrolled */
+  .nav-scrolled {
+    background: rgba(255,255,255,.94);
+    backdrop-filter: blur(14px);
+    border-bottom-color: #e4eaf0;
+    box-shadow: 0 1px 0 rgba(26,74,122,.04);
+  }
+
+  /* ============ MOBILE MENU ============ */
+  .mobile-menu {
+    position: fixed; inset: 0;
+    background: #ffffff;
+    z-index: 100;
+    transform: translateX(100%);
+    transition: transform .5s cubic-bezier(.22,1,.36,1);
+    display: flex; flex-direction: column;
+    padding: 24px;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .mobile-menu.is-open { transform: translateX(0); }
+  .mobile-menu-backdrop {
+    position: fixed; inset: 0;
+    background: rgba(13,47,77,.4);
+    backdrop-filter: blur(4px);
+    z-index: 99;
+    opacity: 0; pointer-events: none;
+    transition: opacity .4s ease;
+  }
+  .mobile-menu-backdrop.is-open { opacity: 1; pointer-events: auto; }
+  .mobile-menu a {
+    display: block; padding: 18px 0;
+    border-bottom: 1px solid #e4eaf0;
+    font-size: 20px; font-weight: 600; color: #1a4a7a;
+    transition: color .3s ease, padding-left .3s ease;
+  }
+  .mobile-menu a:hover { color: #2b8bc9; padding-left: 6px; }
+  body.menu-open { overflow: hidden; }
+
+  /* Hamburger */
+  .hamburger span {
+    display: block; width: 22px; height: 2px;
+    background: #1a4a7a; border-radius: 2px;
+    transition: all .4s cubic-bezier(.22,1,.36,1);
+  }
+  .hamburger span + span { margin-top: 5px; }
+  .hamburger.is-open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .hamburger.is-open span:nth-child(2) { opacity: 0; }
+  .hamburger.is-open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+  /* ============ FILTER DRAWER (mobile) ============ */
+  .filter-drawer {
+    position: fixed; inset: 0;
+    z-index: 100;
+    transform: translateY(100%);
+    transition: transform .5s cubic-bezier(.22,1,.36,1);
+    display: flex; flex-direction: column;
+    background: #fff;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    overflow: hidden;
+  }
+  .filter-drawer.is-open { transform: translateY(0); }
+  .filter-drawer-backdrop {
+    position: fixed; inset: 0;
+    background: rgba(13,47,77,.5);
+    backdrop-filter: blur(4px);
+    z-index: 99;
+    opacity: 0; pointer-events: none;
+    transition: opacity .4s ease;
+  }
+  .filter-drawer-backdrop.is-open { opacity: 1; pointer-events: auto; }
+
+  /* Custom checkbox */
+  .check-item {
+    display: flex; align-items: center; gap: 10px;
+    cursor: pointer;
+    padding: 8px 0;
+    font-size: 14px;
+    color: #5b6b75;
+    transition: color .2s ease;
+  }
+  .check-item:hover { color: #1a4a7a; }
+  .check-item input { display: none; }
+  .check-box {
+    width: 18px; height: 18px;
+    border: 1.5px solid #e4eaf0;
+    border-radius: 4px;
+    display: flex; align-items: center; justify-content: center;
+    transition: all .3s ease;
+    flex-shrink: 0;
+    background: #fff;
+  }
+  .check-item input:checked + .check-box {
+    background: linear-gradient(120deg, #2b8bc9 0%, #3aa76d 100%);
+    border-color: transparent;
+  }
+  .check-item input:checked + .check-box::after {
+    content: '';
+    width: 9px; height: 5px;
+    border-left: 2px solid white;
+    border-bottom: 2px solid white;
+    transform: rotate(-45deg) translate(1px, -1px);
+  }
+  .check-item input:checked ~ .check-label { color: #1a4a7a; font-weight: 600; }
+
+  /* Custom radio */
+  .radio-item {
+    display: flex; align-items: center; gap: 10px;
+    cursor: pointer; padding: 8px 0;
+    font-size: 14px; color: #5b6b75;
+    transition: color .2s ease;
+  }
+  .radio-item:hover { color: #1a4a7a; }
+  .radio-item input { display: none; }
+  .radio-circle {
+    width: 18px; height: 18px;
+    border: 1.5px solid #e4eaf0;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    transition: all .3s ease;
+    flex-shrink: 0;
+    background: #fff;
+  }
+  .radio-item input:checked + .radio-circle {
+    border-color: #3aa76d;
+    background: linear-gradient(120deg, #2b8bc9 0%, #3aa76d 100%);
+  }
+  .radio-item input:checked + .radio-circle::after {
+    content: '';
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: #fff;
+  }
+  .radio-item input:checked ~ .radio-label { color: #1a4a7a; font-weight: 600; }
+
+  /* Custom range */
+  input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 4px;
+    background: #e4eaf0;
+    border-radius: 4px;
+    outline: none;
+  }
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    background: linear-gradient(120deg, #2b8bc9 0%, #3aa76d 100%);
+    cursor: pointer;
+    border: 3px solid white;
+    box-shadow: 0 2px 8px rgba(26,74,122,.25);
+  }
+  input[type="range"]::-moz-range-thumb {
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    background: linear-gradient(120deg, #2b8bc9 0%, #3aa76d 100%);
+    cursor: pointer;
+    border: 3px solid white;
+    box-shadow: 0 2px 8px rgba(26,74,122,.25);
+  }
+
+  /* Product card — grid vs list */
+  .product-card-list {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  @media (min-width: 640px) {
+    .product-card-list {
+      grid-template-columns: 200px 1fr;
+    }
+  }
+
+  /* ============ REVEAL ============ */
+  .reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 1s cubic-bezier(.22,1,.36,1), transform 1s cubic-bezier(.22,1,.36,1);
+  }
+  .reveal.is-in { opacity: 1; transform: translateY(0); }
+
+  /* Swiper pagination */
+  .swiper-pagination-bullet {
+    width: 8px; height: 8px;
+    background: #1a4a7a;
+    opacity: .2;
+    transition: all .4s ease;
+    margin: 0 4px !important;
+  }
+  .swiper-pagination-bullet-active {
+    opacity: 1;
+    background: linear-gradient(120deg, #2b8bc9, #3aa76d);
+    width: 28px;
+    border-radius: 4px;
+  }
+
+  .swiper-btn {
+    width: 44px; height: 44px;
+    border: 1px solid #e4eaf0;
+    background: #fff;
+    display: inline-flex; align-items: center; justify-content: center;
+    transition: all .4s cubic-bezier(.22,1,.36,1);
+    cursor: pointer;
+    border-radius: 8px;
+    color: #1a4a7a;
+    flex-shrink: 0;
+  }
+  @media (min-width: 768px) {
+    .swiper-btn { width: 48px; height: 48px; }
+  }
+  .swiper-btn:hover {
+    background: #1a4a7a; border-color: #1a4a7a; color: #fff;
+  }
+  .swiper-btn svg { transition: transform .4s cubic-bezier(.22,1,.36,1); }
+  .swiper-btn:hover svg { transform: translateX(2px); }
+  .swiper-btn.prev:hover svg { transform: translateX(-2px); }
+
+  .accent-dot {
+    display: inline-block;
+    width: 6px; height: 6px;
+    border-radius: 999px;
+    background: linear-gradient(120deg, #2b8bc9, #3aa76d);
+    flex-shrink: 0;
+  }
+
+  body, html { overflow-x: hidden; max-width: 100vw; }
+
+  /* Hide desktop-only elements on mobile and vice versa */
+  .mobile-only { display: block; }
+  .desktop-only { display: none; }
+  @media (min-width: 1024px) {
+    .mobile-only { display: none; }
+    .desktop-only { display: block; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+    .reveal { opacity: 1 !important; transform: none !important; }
+  }
+</style>
+</head>
+
+<body class="bg-mist text-navy font-sans">
+
+<!-- ================= TOP BAR ================= -->
+<div class="bg-navy text-white/85">
+  <div class="max-w-[1280px] mx-auto px-4 xs:px-5 sm:px-6 lg:px-10 py-2.5 flex items-center justify-between gap-4">
+    <p class="micro text-white/75 truncate">Free delivery · Orders above ₦50,000</p>
+    <div class="hidden sm:flex items-center gap-6 lg:gap-8 shrink-0">
+      <a href="#" class="micro text-white/75 hover:text-white transition">Journal</a>
+      <a href="#" class="micro text-white/75 hover:text-white transition">Support</a>
+    </div>
+  </div>
+</div>
+
+<!-- ================= NAVBAR ================= -->
+<header id="nav" class="bg-white/80 backdrop-blur-md sticky top-0 z-50 border-b border-transparent transition-all duration-500">
+  <div class="max-w-[1280px] mx-auto px-4 xs:px-5 sm:px-6 lg:px-10 flex items-center justify-between h-[72px] sm:h-[80px] lg:h-[84px] gap-4">
+
+    <a href="index.html" class="flex items-center gap-2.5 sm:gap-3 group shrink-0 min-w-0">
+      <svg viewBox="0 0 100 100" class="w-8 h-8 sm:w-9 sm:h-9 lg:w-10 lg:h-10 transition-transform duration-700 group-hover:rotate-[6deg] shrink-0">
+        <defs>
+          <linearGradient id="hb" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#2b8bc9"/>
+            <stop offset="100%" stop-color="#3aa76d"/>
+          </linearGradient>
+        </defs>
+        <path d="M38 8 h24 a6 6 0 0 1 6 6 v18 h18 a6 6 0 0 1 6 6 v24 a6 6 0 0 1 -6 6 H68 v18 a6 6 0 0 1 -6 6 H38 a6 6 0 0 1 -6 -6 V68 H14 a6 6 0 0 1 -6 -6 V38 a6 6 0 0 1 6 -6 h18 V14 a6 6 0 0 1 6 -6 z" fill="url(#hb)"/>
+        <circle cx="50" cy="34" r="6" fill="white"/>
+        <path d="M32 44 Q40 40 46 46 M68 44 Q60 40 54 46" stroke="white" stroke-width="4" stroke-linecap="round" fill="none"/>
+        <path d="M44 60 Q58 52 66 62 Q64 74 50 74 Q44 68 44 60 z" fill="#7fc341"/>
+      </svg>
+      <div class="leading-none min-w-0">
+        <div class="text-[18px] sm:text-[20px] lg:text-[24px] font-extrabold tracking-tight whitespace-nowrap">
+          <span class="text-navy">Health</span><span class="text-green">Buddy</span>
+        </div>
+        <div class="micro text-slate mt-1 hidden xs:block" style="font-size:8.5px;">Better Health · Happier You</div>
+      </div>
+    </a>
+
+    <nav class="hidden md:flex items-center gap-6 lg:gap-10 text-[14px] font-medium text-slate">
+      <a href="shop.html" class="text-navy hover-underline">Shop</a>
+      <a href="consult.html" class="hover-underline hover:text-navy transition">Consult</a>
+      <a href="#" class="hover-underline hover:text-navy transition">Practitioners</a>
+      <a href="#" class="hover-underline hover:text-navy transition hidden lg:inline">About</a>
+    </nav>
+
+    <div class="flex items-center gap-2 sm:gap-4 shrink-0">
+      <a href="#" class="hidden lg:inline text-[14px] text-slate hover:text-navy font-medium transition">Sign in</a>
+
+      <a href="cart.html" class="relative p-2 text-slate hover:text-navy transition" aria-label="Cart">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5M4.5 8.25h15l-1.2 12a1.5 1.5 0 01-1.5 1.35H6.2a1.5 1.5 0 01-1.5-1.35L3.5 8.25h.995z"/>
+        </svg>
+        <span class="absolute top-1 right-1 w-3.5 h-3.5 bg-gradient-to-br from-blue to-green text-white text-[8px] font-bold rounded-full flex items-center justify-center">2</span>
+      </a>
+
+      <a href="consult.html" class="hidden md:inline-flex btn-primary px-4 lg:px-5 py-2.5 text-[13px] font-semibold items-center">
+        Book Consultation
+      </a>
+
+      <button id="menuBtn" class="hamburger md:hidden p-2.5 -mr-2" aria-label="Open menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- ================= MOBILE MENU ================= -->
+<div id="menuBackdrop" class="mobile-menu-backdrop md:hidden"></div>
+<div id="mobileMenu" class="mobile-menu md:hidden">
+  <div class="flex items-center justify-between mb-8 pb-6 border-b border-line">
+    <div class="flex items-center gap-3">
+      <svg viewBox="0 0 100 100" class="w-9 h-9">
+        <defs>
+          <linearGradient id="hb-menu" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#2b8bc9"/>
+            <stop offset="100%" stop-color="#3aa76d"/>
+          </linearGradient>
+        </defs>
+        <path d="M38 8 h24 a6 6 0 0 1 6 6 v18 h18 a6 6 0 0 1 6 6 v24 a6 6 0 0 1 -6 6 H68 v18 a6 6 0 0 1 -6 6 H38 a6 6 0 0 1 -6 -6 V68 H14 a6 6 0 0 1 -6 -6 V38 a6 6 0 0 1 6 -6 h18 V14 a6 6 0 0 1 6 -6 z" fill="url(#hb-menu)"/>
+        <circle cx="50" cy="34" r="6" fill="white"/>
+        <path d="M32 44 Q40 40 46 46 M68 44 Q60 40 54 46" stroke="white" stroke-width="4" stroke-linecap="round" fill="none"/>
+        <path d="M44 60 Q58 52 66 62 Q64 74 50 74 Q44 68 44 60 z" fill="#7fc341"/>
+      </svg>
+      <div class="text-[20px] font-extrabold">
+        <span class="text-navy">Health</span><span class="text-green">Buddy</span>
+      </div>
+    </div>
+    <button id="closeBtn" class="p-2 -mr-2" aria-label="Close menu">
+      <svg class="w-6 h-6 text-navy" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+    </button>
+  </div>
+
+  <nav class="flex-1">
+    <a href="shop.html">Shop</a>
+    <a href="consult.html">Consult</a>
+    <a href="#">Practitioners</a>
+    <a href="#">About</a>
+    <a href="#">Journal</a>
+    <a href="#">Sign in</a>
+  </nav>
+
+  <div class="mt-8 pt-6 border-t border-line space-y-3">
+    <a href="shop.html" class="block w-full text-center btn-outline py-3.5 font-semibold text-[14px]">Shop Products</a>
+    <a href="consult.html" class="block w-full text-center btn-primary py-3.5 font-semibold text-[14px]">Book Consultation</a>
+  </div>
+
+  <p class="micro text-slate mt-8 text-center">Better Health · Happier You</p>
+</div>
+
+<!-- ================= PAGE HEADER ================= -->
+<section class="bg-white border-b border-line">
+  <div class="max-w-[1280px] mx-auto px-4 xs:px-5 sm:px-6 lg:px-10 pt-8 sm:pt-10 lg:pt-14 pb-10 sm:pb-12 lg:pb-16">
+
+    <!-- Breadcrumb -->
+    <nav class="flex items-center gap-2 text-[12px] sm:text-[13px] text-slate mb-5 sm:mb-6">
+      <a href="index.html" class="hover:text-navy transition">Home</a>
+      <span class="text-slate/50">/</span>
+      <span class="text-navy font-medium">Shop</span>
+    </nav>
+
+    <div class="grid md:grid-cols-12 gap-6 md:gap-10 items-end">
+      <div class="md:col-span-8">
+        <div class="inline-flex items-center gap-2.5 mb-4 sm:mb-5">
+          <span class="accent-dot"></span>
+          <span class="micro text-green">The Collection</span>
+        </div>
+        <h1 class="display-md text-navy mb-3 sm:mb-4">
+          Essentials chosen<br class="hidden sm:block"/> with intention.
+        </h1>
+        <p class="text-slate text-[14px] sm:text-[15px] lg:text-[16px] leading-[1.7] max-w-[520px]">
+          Every product is sourced from trusted makers, tested for purity, and shipped with care.
+        </p>
+      </div>
+
+      <div class="md:col-span-4 md:text-right">
+        <p class="text-slate text-[13px] sm:text-[14px] mb-2">Showing</p>
+        <p class="text-navy font-bold text-[20px] sm:text-[24px]"><span class="gradient-text">48</span> products</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ================= FEATURED STRIP (SWIPER) ================= -->
+<section class="bg-white border-b border-line overflow-hidden">
+  <div class="max-w-[1280px] mx-auto px-4 xs:px-5 sm:px-6 lg:px-10 py-10 sm:py-12 lg:py-14">
+
+    <div class="flex items-end justify-between gap-4 mb-7 sm:mb-8">
+      <div>
+        <div class="inline-flex items-center gap-2.5 mb-3">
+          <span class="accent-dot"></span>
+          <span class="micro text-green">Editor's Picks</span>
+        </div>
+        <h2 class="display-sm text-navy">This week's favourites.</h2>
+      </div>
+      <div class="mobile-hide-nav flex items-center gap-2 sm:gap-3">
+        <div class="swiper-btn prev feat-prev">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+        </div>
+        <div class="swiper-btn feat-next">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+        </div>
+      </div>
+    </div>
+
+    <div class="swiper featSwiper">
+      <div class="swiper-wrapper pb-2">
+
+        <div class="swiper-slide h-auto">
+          <a href="product.html" class="group block bg-mist rounded-xl sm:rounded-2xl overflow-hidden border border-line hover:border-navy/20 hover:shadow-[0_20px_50px_-20px_rgba(26,74,122,.2)] transition-all duration-500 h-full">
+            <div class="aspect-[4/5] overflow-hidden bg-mist relative">
+              <img src="https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=600" class="w-full h-full object-cover group-hover:scale-[1.06] transition duration-[1200ms]" alt="Product"/>
+              <span class="absolute top-3 left-3 bg-gradient-brand text-white text-[9px] sm:text-[10px] tracking-[0.14em] uppercase font-bold px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full">Bestseller</span>
+            </div>
+            <div class="p-3.5 sm:p-4">
+              <h3 class="text-[13px] sm:text-[14px] font-bold text-navy mb-1 truncate">Vitamin D3 Complex</h3>
+              <div class="flex items-center justify-between pt-2">
+                <span class="text-[14px] sm:text-[15px] font-extrabold text-navy">₦12,500</span>
+                <span class="text-[10px] text-slate">⭐ 4.8</span>
+              </div>
+            </div>
+          </a>
+        </div>
+
+        <div class="swiper-slide h-auto">
+          <a href="product.html" class="group block bg-mist rounded-xl sm:rounded-2xl overflow-hidden border border-line hover:border-navy/20 hover:shadow-[0_20px_50px_-20px_rgba(26,74,122,.2)] transition-all duration-500 h-full">
+            <div class="aspect-[4/5] overflow-hidden bg-mist relative">
+              <img src="https://images.unsplash.com/photo-1550572017-edd951aa8f72?w=600" class="w-full h-full object-cover group-hover:scale-[1.06] transition duration-[1200ms]" alt="Product"/>
+            </div>
+            <div class="p-3.5 sm:p-4">
+              <h3 class="text-[13px] sm:text-[14px] font-bold text-navy mb-1 truncate">Omega-3 Fish Oil</h3>
+              <div class="flex items-center justify-between pt-2">
+                <span class="text-[14px] sm:text-[15px] font-extrabold text-navy">₦8,900</span>
+                <span class="text-[10px] text-slate">⭐ 4.9</span>
+              </div>
+            </div>
+          </a>
+        </div>
+
+        <div class="swiper-slide h-auto">
+          <a href="product.html" class="group block bg-mist rounded-xl sm:rounded-2xl overflow-hidden border border-line hover:border-navy/20 hover:shadow-[0_20px_50px_-20px_rgba(26,74,122,.2)] transition-all duration-500 h-full">
+            <div class="aspect-[4/5] overflow-hidden bg-mist relative">
+              <img src="https://images.unsplash.com/photo-1607619056574-7b8d3ee536b2?w=600" class="w-full h-full object-cover group-hover:scale-[1.06] transition duration-[1200ms]" alt="Product"/>
+            </div>
+            <div class="p-3.5 sm:p-4">
+              <h3 class="text-[13px] sm:text-[14px] font-bold text-navy mb-1 truncate">Herbal Detox Tea</h3>
+              <div class="flex items-center justify-between pt-2">
+                <span class="text-[14px] sm:text-[15px] font-extrabold text-navy">₦5,500</span>
+                <span class="text-[10px] text-slate">⭐ 4.6</span>
+              </div>
+            </div>
+          </a>
+        </div>
+
+        <div class="swiper-slide h-auto">
+          <a href="product.html" class="group block bg-mist rounded-xl sm:rounded-2xl overflow-hidden border border-line hover:border-navy/20 hover:shadow-[0_20px_50px_-20px_rgba(26,74,122,.2)] transition-all duration-500 h-full">
+            <div class="aspect-[4/5] overflow-hidden bg-mist relative">
+              <img src="https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=600" class="w-full h-full object-cover group-hover:scale-[1.06] transition duration-[1200ms]" alt="Product"/>
+            </div>
+            <div class="p-3.5 sm:p-4">
+              <h3 class="text-[13px] sm:text-[14px] font-bold text-navy mb-1 truncate">Multivitamin Gummies</h3>
+              <div class="flex items-center justify-between pt-2">
+                <span class="text-[14px] sm:text-[15px] font-extrabold text-navy">₦7,200</span>
+                <span class="text-[10px] text-slate">⭐ 4.7</span>
+              </div>
+            </div>
+          </a>
+        </div>
+
+        <div class="swiper-slide h-auto">
+          <a href="product.html" class="group block bg-mist rounded-xl sm:rounded-2xl overflow-hidden border border-line hover:border-navy/20 hover:shadow-[0_20px_50px_-20px_rgba(26,74,122,.2)] transition-all duration-500 h-full">
+            <div class="aspect-[4/5] overflow-hidden bg-mist relative">
+              <img src="https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=600" class="w-full h-full object-cover group-hover:scale-[1.06] transition duration-[1200ms]" alt="Product"/>
+            </div>
+            <div class="p-3.5 sm:p-4">
+              <h3 class="text-[13px] sm:text-[14px] font-bold text-navy mb-1 truncate">Collagen Peptides</h3>
+              <div class="flex items-center justify-between pt-2">
+                <span class="text-[14px] sm:text-[15px] font-extrabold text-navy">₦15,900</span>
+                <span class="text-[10px] text-slate">⭐ 4.9</span>
+              </div>
+            </div>
+          </a>
+        </div>
+
+        <div class="swiper-slide h-auto">
+          <a href="product.html" class="group block bg-mist rounded-xl sm:rounded-2xl overflow-hidden border border-line hover:border-navy/20 hover:shadow-[0_20px_50px_-20px_rgba(26,74,122,.2)] transition-all duration-500 h-full">
+            <div class="aspect-[4/5] overflow-hidden bg-mist relative">
+              <img src="https://images.unsplash.com/photo-1607619056574-7b8d3ee536b2?w=600" class="w-full h-full object-cover group-hover:scale-[1.06] transition duration-[1200ms]" alt="Product"/>
+            </div>
+            <div class="p-3.5 sm:p-4">
+              <h3 class="text-[13px] sm:text-[14px] font-bold text-navy mb-1 truncate">Immune Boost</h3>
+              <div class="flex items-center justify-between pt-2">
+                <span class="text-[14px] sm:text-[15px] font-extrabold text-navy">₦10,000</span>
+                <span class="text-[10px] text-slate">⭐ 4.5</span>
+              </div>
+            </div>
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= MAIN SHOP AREA ================= -->
+<section class="bg-mist">
+  <div class="max-w-[1280px] mx-auto px-4 xs:px-5 sm:px-6 lg:px-10 py-10 sm:py-12 lg:py-16">
+
+    <div class="grid lg:grid-cols-12 gap-8 lg:gap-10">
+
+      <!-- ============ DESKTOP SIDEBAR FILTERS ============ -->
+      <aside class="hidden lg:block lg:col-span-3">
+        <div class="sticky top-[100px] bg-white rounded-2xl border border-line p-6">
+
+          <div class="flex items-center justify-between mb-6 pb-5 border-b border-line">
+            <h3 class="text-[15px] font-bold text-navy">Filters</h3>
+            <button class="text-[12px] text-slate hover:text-navy transition">Clear all</button>
+          </div>
+
+          <!-- Category -->
+          <div class="mb-7">
+            <p class="micro text-slate mb-3">Category</p>
+            <div class="space-y-1">
+              <label class="check-item">
+                <input type="checkbox" checked/>
+                <span class="check-box"></span>
+                <span class="check-label">Supplements <span class="text-slate/60">(24)</span></span>
+              </label>
+              <label class="check-item">
+                <input type="checkbox"/>
+                <span class="check-box"></span>
+                <span class="check-label">Vitamins <span class="text-slate/60">(18)</span></span>
+              </label>
+              <label class="check-item">
+                <input type="checkbox"/>
+                <span class="check-box"></span>
+                <span class="check-label">Herbal <span class="text-slate/60">(12)</span></span>
+              </label>
+              <label class="check-item">
+                <input type="checkbox"/>
+                <span class="check-box"></span>
+                <span class="check-label">Devices <span class="text-slate/60">(8)</span></span>
+              </label>
+              <label class="check-item">
+                <input type="checkbox"/>
+                <span class="check-box"></span>
+                <span class="check-label">Wellness <span class="text-slate/60">(15)</span></span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Price -->
+          <div class="mb-7 pb-7 border-b border-line">
+            <p class="micro text-slate mb-3">Price Range</p>
+            <input type="range" min="0" max="50000" value="25000" step="1000" id="priceRange"/>
+            <div class="flex items-center justify-between text-[13px] text-slate mt-3">
+              <span>₦0</span>
+              <span class="text-navy font-bold" id="priceLabel">₦25,000</span>
+              <span>₦50,000</span>
+            </div>
+          </div>
+
+          <!-- Rating -->
+          <div class="mb-7 pb-7 border-b border-line">
+            <p class="micro text-slate mb-3">Rating</p>
+            <div class="space-y-1">
+              <label class="radio-item">
+                <input type="radio" name="rating"/>
+                <span class="radio-circle"></span>
+                <span class="radio-label">⭐⭐⭐⭐⭐ <span class="text-slate/60">5.0</span></span>
+              </label>
+              <label class="radio-item">
+                <input type="radio" name="rating" checked/>
+                <span class="radio-circle"></span>
+                <span class="radio-label">⭐⭐⭐⭐ & up <span class="text-slate/60">4.0</span></span>
+              </label>
+              <label class="radio-item">
+                <input type="radio" name="rating"/>
+                <span class="radio-circle"></span>
+                <span class="radio-label">⭐⭐⭐ & up <span class="text-slate/60">3.0</span></span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Availability -->
+          <div>
+            <p class="micro text-slate mb-3">Availability</p>
+            <div class="space-y-1">
+              <label class="check-item">
+                <input type="checkbox" checked/>
+                <span class="check-box"></span>
+                <span class="check-label">In stock</span>
+              </label>
+              <label class="check-item">
+                <input type="checkbox"/>
+                <span class="check-box"></span>
+                <span class="check-label">On sale</span>
+              </label>
+            </div>
+          </div>
+
+        </div>
+      </aside>
+
+      <!-- ============ MAIN PRODUCT AREA ============ -->
+      <main class="lg:col-span-9">
+
+        <!-- Toolbar -->
+        <div class="flex items-center justify-between gap-3 mb-6 sm:mb-8">
+
+          <!-- Mobile filter button -->
+          <button id="filterBtn" class="lg:hidden inline-flex items-center gap-2 bg-white border border-line rounded-lg px-4 py-2.5 text-[13px] font-semibold text-navy">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 4.5h18m-16.5 7.5h15M6 19.5h12"/></svg>
+            Filters
+            <span class="bg-gradient-brand text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center">3</span>
+          </button>
+
+          <!-- Result count -->
+          <p class="hidden lg:block text-[14px] text-slate"><span class="text-navy font-bold">48</span> products found</p>
+
+          <!-- Right controls -->
+          <div class="flex items-center gap-2 sm:gap-3 ml-auto">
+            <!-- View toggle (desktop) -->
+            <div class="hidden lg:flex items-center gap-1 bg-white border border-line rounded-lg p-1">
+              <button data-view="grid" class="view-btn active p-2 rounded-md transition text-navy" aria-label="Grid view">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z"/></svg>
+              </button>
+              <button data-view="list" class="view-btn p-2 rounded-md transition text-slate hover:text-navy" aria-label="List view">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 5.25h16.5m-16.5 6.75h16.5m-16.5 6.75h16.5"/></svg>
+              </button>
+            </div>
+
+            <!-- Sort -->
+            <div class="relative">
+              <select id="sortSelect" class="appearance-none bg-white border border-line rounded-lg pl-3.5 pr-9 py-2.5 text-[13px] font-semibold text-navy cursor-pointer outline-none focus:border-blue transition">
+                <option>Sort: Featured</option>
+                <option>Price: Low to High</option>
+                <option>Price: High to Low</option>
+                <option>Rating: Highest</option>
+                <option>Newest</option>
+              </select>
+              <svg class="w-3.5 h-3.5 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-slate" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- Active filter chips -->
+        <div class="flex flex-wrap items-center gap-2 mb-6">
+          <span class="micro text-slate mr-1">Active:</span>
+          <button class="group inline-flex items-center gap-1.5 bg-white border border-line rounded-full pl-3 pr-2 py-1.5 text-[12px] font-medium text-navy hover:border-navy/30 transition">
+            Supplements
+            <svg class="w-3.5 h-3.5 text-slate group-hover:text-navy transition" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+          </button>
+          <button class="group inline-flex items-center gap-1.5 bg-white border border-line rounded-full pl-3 pr-2 py-1.5 text-[12px] font-medium text-navy hover:border-navy/30 transition">
+            ⭐ 4.0 & up
+            <svg class="w-3.5 h-3.5 text-slate group-hover:text-navy transition" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+          </button>
+          <button class="group inline-flex items-center gap-1.5 bg-white border border-line rounded-full pl-3 pr-2 py-1.5 text-[12px] font-medium text-navy hover:border-navy/30 transition">
+            In stock
+            <svg class="w-3.5 h-3.5 text-slate group-hover:text-navy transition" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+          </button>
+        </div>
+
+        <!-- ============ PRODUCT GRID ============ -->
+        <div id="productGrid" class="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-5 lg:gap-6">
+
+          <!-- Card 1 -->
+          <a href="product.html" class="product-card group block bg-white rounded-xl sm:rounded-2xl overflow-hidden border border-line hover:border-navy/20 hover:shadow-[0_24px_60px_-24px_rgba(26,74,122,.2)] transition-all duration-500 reveal">
+            <div class="aspect-square sm:aspect-[4/5] overflow-hidden bg-mist relative">
+              <img src="https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=600" class="w-full h-full object-cover group-hover:scale-[1.06] transition duration-[1200ms] ease-out" alt="Vitamin D3"/>
+              <span class="absolute top-3 left-3 bg-white/95 backdrop-blur-sm text-navy text-[9px] sm:text-[10px] tracking-[0.14em] uppercase font-bold px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full">Immunity</span>
+              <span class="absolute top-3 right-3 bg-gradient-brand text-white text-[9px] sm:text-[10px] tracking-[0.14em] uppercase font-bold px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full">-15%</span>
+            </div>
+            <div class="p-4 sm:p-5">
+              <h3 class="text-[14px] sm:text-[16px] font-bold text-navy mb-1.5 group-hover:text-blue transition">Vitamin D3 Complex</h3>
+              <p class="text-slate text-[12px] sm:text-[13px] mb-3">60 softgels</p>
+              <div class="flex items-center gap-2 mb-4">
+                <span class="text-[11px]">⭐⭐⭐⭐⭐</span>
+                <span class="text-[11px] text-slate">(120)</span>
+              </div>
+              <div class="flex items-baseline gap-2 mb-4">
+                <span class="text-[15px] sm:text-[17px] font-extrabold text-navy">₦12,500</span>
+                <span class="text-[12px] text-slate line-through">₦14,700</span>
+              </div>
+              <div class="flex items-center gap-2 pt-4 rule">
+                <button type="button" onclick="event.preventDefault()" class="flex-1 btn-outline py-2.5 text-[12px] font-semibold">Add to Cart</button>
+                <button type="button" onclick="event.preventDefault()" class="w-10 h-10 flex items-center justify-center border border-line rounded-lg text-slate hover:text-navy hover:border-navy/30 transition" aria-label="Add to wishlist">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"/></svg>
+                </button>
+              </div>
+            </div>
+          </a>
+
+          <!-- Card 2 -->
+          <a href="product.html" class="product-card group block bg-white rounded-xl sm:rounded-2xl overflow-hidden border border-line hover:border-navy/20 hover:shadow-[0_24px_60px_-24px_rgba(26,74,122,.2)] transition-all duration-500 reveal">
+            <div class="aspect-square sm:aspect-[4/5] overflow-hidden bg-mist relative">
+              <img src="https://images.unsplash.com/photo-1550572017-edd951aa8f72?w=600" class="w-full h-full object-cover group-hover:scale-[1.06] transition duration-[1200ms] ease-out" alt="Omega-3"/>
+              <span class="absolute top-3 left-3 bg-white/95 backdrop-blur-sm text-navy text-[9px] sm:text-[10px] tracking-[0.14em] uppercase font-bold px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full">Heart</span>
+            </div>
+            <div class="p-4 sm:p-5">
+              <h3 class="text-[14px] sm:text-[16px] font-bold text-navy mb-1.5 group-hover:text-blue transition">Omega-3 Fish Oil</h3>
+              <p class="text-slate text-[12px] sm:text-[13px] mb-3">90 capsules</p>
+              <div class="flex items-center gap-2 mb-4">
+                <span class="text-[11px]">⭐⭐⭐⭐⭐</span>
+                <span class="text-[11px] text-slate">(89)</span>
+              </div>
+              <div class="flex items-baseline gap-2 mb-4">
+                <span class="text-[15px] sm:text-[17px] font-extrabold text-navy">₦8,900</span>
+              </div>
+              <div class="flex items-center gap-2 pt-4 rule">
+                <button type="button" onclick="event.preventDefault()" class="flex-1 btn-outline py-2.5 text-[12px] font-semibold">Add to Cart</button>
+                <button type="button" onclick="event.preventDefault()" class="w-10 h-10 flex items-center justify-center border border-line rounded-lg text-slate hover:text-navy hover:border-navy/30 transition" aria-label="Add to wishlist">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"/></svg>
+                </button>
+              </div>
+            </div>
+          </a>
+
+          <!-- Card 3 -->
+          <a href="product.html" class="product-card group block bg-white rounded-xl sm:rounded-2xl overflow-hidden border border-line hover:border-navy/20 hover:shadow-[0_24px_60px_-24px_rgba(26,74,122,.2)] transition-all duration-500 reveal">
+            <div class="aspect-square sm:aspect-[4/5] overflow-hidden bg-mist relative">
+              <img src="https://images.unsplash.com/photo-1607619056574-7b8d3ee536b2?w=600" class="w-full h-full object-cover group-hover:scale-[1.06] transition duration-[1200ms] ease-out" alt="Herbal Detox Tea"/>
+              <span class="absolute top-3 left-3 bg-white/95 backdrop-blur-sm text-navy text-[9px] sm:text-[10px] tracking-[0.14em] uppercase font-bold px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full">Digestion</span>
+            </div>
+            <div class="p-4 sm:p-5">
+              <h3 class="text-[14px] sm:text-[16px] font-bold text-navy mb-1.5 group-hover:text-blue transition">Herbal Detox Tea</h3>
+              <p class="text-slate text-[12px] sm:text-[13px] mb-3">30 tea bags</p>
+              <div class="flex items-center gap-2 mb-4">
+                <span class="text-[11px]">⭐⭐⭐⭐</span>
+                <span class="text-[11px] text-slate">(54)</span>
+              </div>
+              <div class="flex items-baseline gap-2 mb-4">
+                <span class="text-[15px] sm:text-[17px] font-extrabold text-navy">₦5,500</span>
+              </div>
+              <div class="flex items-center gap-2 pt-4 rule">
+                <button type="button" onclick="event.preventDefault()" class="flex-1 btn-outline py-2.5 text-[12px] font-semibold">Add to Cart</button>
+                <button type="button" onclick="event.preventDefault()" class="w-10 h-10 flex items-center justify-center border border-line rounded-lg text-slate hover:text-navy hover:border-navy/30 transition" aria-label="Add to wishlist">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"/></svg>
+                </button>
+              </div>
+            </div>
+          </a>
+
+          <!-- Card 4 -->
+          <a href="product.html" class="product-card group block bg-white rounded-xl sm:rounded-2xl overflow-hidden border border-line hover:border-navy/20 hover:shadow-[0_24px_60px_-24px_rgba(26,74,122,.2)] transition-all duration-500 reveal">
+            <div class="aspect-square sm:aspect-[4/5] overflow-hidden bg-mist relative">
+              <img src="https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=600" class="w-full h-full object-cover group-hover:scale-[1.06] transition duration-[1200ms] ease-out" alt="Multivitamin"/>
+              <span class="absolute top-3 left-3 bg-white/95 backdrop-blur-sm text-navy text-[9px] sm:text-[10px] tracking-[0.14em] uppercase font-bold px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full">Daily</span>
+            </div>
+            <div class="p-4 sm:p-5">
+              <h3 class="text-[14px] sm:text-[16px] font-bold text-navy mb-1.5 group-hover:text-blue transition">Multivitamin Gummies</h3>
+              <p class="text-slate text-[12px] sm:text-[13px] mb-3">90 gummies</p>
+              <div class="flex items-center gap-2 mb-4">
+                <span class="text-[11px]">⭐⭐⭐⭐⭐</span>
+                <span class="text-[11px] text-slate">(210)</span>
+              </div>
+              <div class="flex items-baseline gap-2 mb-4">
+                <span class="text-[15px] sm:text-[17px] font-extrabold text-navy">₦7,200</span>
+              </div>
+              <div class="flex items-center gap-2 pt-4 rule">
+                <button type="button" onclick="event.preventDefault()" class="flex-1 btn-outline py-2.5 text-[12px] font-semibold">Add to Cart</button>
+                <button type="button" onclick="event.preventDefault()" class="w-10 h-10 flex items-center justify-center border border-line rounded-lg text-slate hover:text-navy hover:border-navy/30 transition" aria-label="Add to wishlist">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"/></svg>
+                </button>
+              </div>
+            </div>
+          </a>
+
+          <!-- Card 5 -->
+          <a href="product.html" class="product-card group block bg-white rounded-xl sm:rounded-2xl overflow-hidden border border-line hover:border-navy/20 hover:shadow-[0_24px_60px_-24px_rgba(26,74,122,.2)] transition-all duration-500 reveal">
+            <div class="aspect-square sm:aspect-[4/5] overflow-hidden bg-mist relative">
+              <img src="https://images.unsplash.com/photo-1607619056574-7b8d3ee536b2?w=600" class="w-full h-full object-cover group-hover:scale-[1.06] transition duration-[1200ms] ease-out" alt="Immune Boost"/>
+              <span class="absolute top-3 left-3 bg-white/95 backdrop-blur-sm text-navy text-[9px] sm:text-[10px] tracking-[0.14em] uppercase font-bold px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full">Immunity</span>
+            </div>
+            <div class="p-4 sm:p-5">
+              <h3 class="text-[14px] sm:text-[16px] font-bold text-navy mb-1.5 group-hover:text-blue transition">Immune Boost Capsules</h3>
+              <p class="text-slate text-[12px] sm:text-[13px] mb-3">60 capsules</p>
+              <div class="flex items-center gap-2 mb-4">
+                <span class="text-[11px]">⭐⭐⭐⭐</span>
+                <span class="text-[11px] text-slate">(76)</span>
+              </div>
+              <div class="flex items-baseline gap-2 mb-4">
+                <span class="text-[15px] sm:text-[17px] font-extrabold text-navy">₦10,000</span>
+              </div>
+              <div class="flex items-center gap-2 pt-4 rule">
+                <button type="button" onclick="event.preventDefault()" class="flex-1 btn-outline py-2.5 text-[12px] font-semibold">Add to Cart</button>
+                <button type="button" onclick="event.preventDefault()" class="w-10 h-10 flex items-center justify-center border border-line rounded-lg text-slate hover:text-navy hover:border-navy/30 transition" aria-label="Add to wishlist">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"/></svg>
+                </button>
+              </div>
+            </div>
+          </a>
+
+          <!-- Card 6 -->
+          <a href="product.html" class="product-card group block bg-white rounded-xl sm:rounded-2xl overflow-hidden border border-line hover:border-navy/20 hover:shadow-[0_24px_60px_-24px_rgba(26,74,122,.2)] transition-all duration-500 reveal">
+            <div class="aspect-square sm:aspect-[4/5] overflow-hidden bg-mist relative">
+              <img src="https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=600" class="w-full h-full object-cover group-hover:scale-[1.06] transition duration-[1200ms] ease-out" alt="Collagen"/>
+              <span class="absolute top-3 left-3 bg-white/95 backdrop-blur-sm text-navy text-[9px] sm:text-[10px] tracking-[0.14em] uppercase font-bold px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full">Wellness</span>
+              <span class="absolute top-3 right-3 bg-gradient-brand text-white text-[9px] sm:text-[10px] tracking-[0.14em] uppercase font-bold px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full">New</span>
+            </div>
+            <div class="p-4 sm:p-5">
+              <h3 class="text-[14px] sm:text-[16px] font-bold text-navy mb-1.5 group-hover:text-blue transition">Collagen Peptides</h3>
+              <p class="text-slate text-[12px] sm:text-[13px] mb-3">300g powder</p>
+              <div class="flex items-center gap-2 mb-4">
+                <span class="text-[11px]">⭐⭐⭐⭐⭐</span>
+                <span class="text-[11px] text-slate">(305)</span>
+              </div>
+              <div class="flex items-baseline gap-2 mb-4">
+                <span class="text-[15px] sm:text-[17px] font-extrabold text-navy">₦15,900</span>
+              </div>
+              <div class="flex items-center gap-2 pt-4 rule">
+                <button type="button" onclick="event.preventDefault()" class="flex-1 btn-outline py-2.5 text-[12px] font-semibold">Add to Cart</button>
+                <button type="button" onclick="event.preventDefault()" class="w-10 h-10 flex items-center justify-center border border-line rounded-lg text-slate hover:text-navy hover:border-navy/30 transition" aria-label="Add to wishlist">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"/></svg>
+                </button>
+              </div>
+            </div>
+          </a>
+
+          <!-- Card 7 -->
+          <a href="product.html" class="product-card group block bg-white rounded-xl sm:rounded-2xl overflow-hidden border border-line hover:border-navy/20 hover:shadow-[0_24px_60px_-24px_rgba(26,74,122,.2)] transition-all duration-500 reveal">
+            <div class="aspect-square sm:aspect-[4/5] overflow-hidden bg-mist relative">
+              <img src="https://images.unsplash.com/photo-1550572017-edd951aa8f72?w=600" class="w-full h-full object-cover group-hover:scale-[1.06] transition duration-[1200ms] ease-out" alt="Magnesium"/>
+              <span class="absolute top-3 left-3 bg-white/95 backdrop-blur-sm text-navy text-[9px] sm:text-[10px] tracking-[0.14em] uppercase font-bold px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full">Daily</span>
+            </div>
+            <div class="p-4 sm:p-5">
+              <h3 class="text-[14px] sm:text-[16px] font-bold text-navy mb-1.5 group-hover:text-blue transition">Magnesium Glycinate</h3>
+              <p class="text-slate text-[12px] sm:text-[13px] mb-3">120 tablets</p>
+              <div class="flex items-center gap-2 mb-4">
+                <span class="text-[11px]">⭐⭐⭐⭐⭐</span>
+                <span class="text-[11px] text-slate">(142)</span>
+              </div>
+              <div class="flex items-baseline gap-2 mb-4">
+                <span class="text-[15px] sm:text-[17px] font-extrabold text-navy">₦9,800</span>
+              </div>
+              <div class="flex items-center gap-2 pt-4 rule">
+                <button type="button" onclick="event.preventDefault()" class="flex-1 btn-outline py-2.5 text-[12px] font-semibold">Add to Cart</button>
+                <button type="button" onclick="event.preventDefault()" class="w-10 h-10 flex items-center justify-center border border-line rounded-lg text-slate hover:text-navy hover:border-navy/30 transition" aria-label="Add to wishlist">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"/></svg>
+                </button>
+              </div>
+            </div>
+          </a>
+
+          <!-- Card 8 -->
+          <a href="product.html" class="product-card group block bg-white rounded-xl sm:rounded-2xl overflow-hidden border border-line hover:border-navy/20 hover:shadow-[0_24px_60px_-24px_rgba(26,74,122,.2)] transition-all duration-500 reveal">
+            <div class="aspect-square sm:aspect-[4/5] overflow-hidden bg-mist relative">
+              <img src="https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=600" class="w-full h-full object-cover group-hover:scale-[1.06] transition duration-[1200ms] ease-out" alt="Adaptogen"/>
+              <span class="absolute top-3 left-3 bg-white/95 backdrop-blur-sm text-navy text-[9px] sm:text-[10px] tracking-[0.14em] uppercase font-bold px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full">Wellness</span>
+            </div>
+            <div class="p-4 sm:p-5">
+              <h3 class="text-[14px] sm:text-[16px] font-bold text-navy mb-1.5 group-hover:text-blue transition">Adaptogen Blend</h3>
+              <p class="text-slate text-[12px] sm:text-[13px] mb-3">60 capsules</p>
+              <div class="flex items-center gap-2 mb-4">
+                <span class="text-[11px]">⭐⭐⭐⭐</span>
+                <span class="text-[11px] text-slate">(58)</span>
+              </div>
+              <div class="flex items-baseline gap-2 mb-4">
+                <span class="text-[15px] sm:text-[17px] font-extrabold text-navy">₦13,200</span>
+              </div>
+              <div class="flex items-center gap-2 pt-4 rule">
+                <button type="button" onclick="event.preventDefault()" class="flex-1 btn-outline py-2.5 text-[12px] font-semibold">Add to Cart</button>
+                <button type="button" onclick="event.preventDefault()" class="w-10 h-10 flex items-center justify-center border border-line rounded-lg text-slate hover:text-navy hover:border-navy/30 transition" aria-label="Add to wishlist">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"/></svg>
+                </button>
+              </div>
+            </div>
+          </a>
+
+          <!-- Card 9 -->
+          <a href="product.html" class="product-card group block bg-white rounded-xl sm:rounded-2xl overflow-hidden border border-line hover:border-navy/20 hover:shadow-[0_24px_60px_-24px_rgba(26,74,122,.2)] transition-all duration-500 reveal">
+            <div class="aspect-square sm:aspect-[4/5] overflow-hidden bg-mist relative">
+              <img src="https://images.unsplash.com/photo-1607619056574-7b8d3ee536b2?w=600" class="w-full h-full object-cover group-hover:scale-[1.06] transition duration-[1200ms] ease-out" alt="Probiotic"/>
+              <span class="absolute top-3 left-3 bg-white/95 backdrop-blur-sm text-navy text-[9px] sm:text-[10px] tracking-[0.14em] uppercase font-bold px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full">Digestion</span>
+            </div>
+            <div class="p-4 sm:p-5">
+              <h3 class="text-[14px] sm:text-[16px] font-bold text-navy mb-1.5 group-hover:text-blue transition">Probiotic Complex</h3>
+              <p class="text-slate text-[12px] sm:text-[13px] mb-3">30 capsules</p>
+              <div class="flex items-center gap-2 mb-4">
+                <span class="text-[11px]">⭐⭐⭐⭐⭐</span>
+                <span class="text-[11px] text-slate">(94)</span>
+              </div>
+              <div class="flex items-baseline gap-2 mb-4">
+                <span class="text-[15px] sm:text-[17px] font-extrabold text-navy">₦11,500</span>
+              </div>
+              <div class="flex items-center gap-2 pt-4 rule">
+                <button type="button" onclick="event.preventDefault()" class="flex-1 btn-outline py-2.5 text-[12px] font-semibold">Add to Cart</button>
+                <button type="button" onclick="event.preventDefault()" class="w-10 h-10 flex items-center justify-center border border-line rounded-lg text-slate hover:text-navy hover:border-navy/30 transition" aria-label="Add to wishlist">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"/></svg>
+                </button>
+              </div>
+            </div>
+          </a>
+
+        </div>
+
+        <!-- ============ PAGINATION ============ -->
+        <nav class="flex items-center justify-center gap-1.5 sm:gap-2 mt-12 sm:mt-14" aria-label="Pagination">
+          <button class="w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center rounded-lg border border-line text-slate hover:text-navy hover:border-navy/30 transition" aria-label="Previous">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+          </button>
+          <button class="w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center rounded-lg text-[13px] sm:text-[14px] font-semibold bg-navy text-white">1</button>
+          <button class="w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center rounded-lg text-[13px] sm:text-[14px] font-semibold text-navy hover:bg-white border border-transparent hover:border-line transition">2</button>
+          <button class="w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center rounded-lg text-[13px] sm:text-[14px] font-semibold text-navy hover:bg-white border border-transparent hover:border-line transition">3</button>
+          <span class="w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center text-slate text-[13px] sm:text-[14px]">…</span>
+          <button class="w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center rounded-lg text-[13px] sm:text-[14px] font-semibold text-navy hover:bg-white border border-transparent hover:border-line transition">8</button>
+          <button class="w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center rounded-lg border border-line text-slate hover:text-navy hover:border-navy/30 transition" aria-label="Next">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+          </button>
+        </nav>
+
+      </main>
+    </div>
+  </div>
+</section>
+
+<!-- ================= TRUST STRIP ================= -->
+<section class="bg-tint border-y border-line">
+  <div class="max-w-[1280px] mx-auto px-4 xs:px-5 sm:px-6 lg:px-10 py-10 sm:py-12">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-y-8 gap-x-4 sm:gap-8">
+
+      <div class="text-center">
+        <div class="w-11 h-11 sm:w-12 sm:h-12 mx-auto mb-3 rounded-xl gradient-brand flex items-center justify-center text-white">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 18.75a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 01-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124a17.902 17.902 0 00-3.213-9.193 2.056 2.056 0 00-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 00-10.026 0 1.106 1.106 0 00-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12"/></svg>
+        </div>
+        <p class="text-[13px] sm:text-[14px] font-bold text-navy mb-1">Free Delivery</p>
+        <p class="text-[11px] sm:text-[12px] text-slate">Orders above ₦50,000</p>
+      </div>
+
+      <div class="text-center">
+        <div class="w-11 h-11 sm:w-12 sm:h-12 mx-auto mb-3 rounded-xl gradient-brand flex items-center justify-center text-white">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        </div>
+        <p class="text-[13px] sm:text-[14px] font-bold text-navy mb-1">Verified Products</p>
+        <p class="text-[11px] sm:text-[12px] text-slate">NAFDAC certified</p>
+      </div>
+
+      <div class="text-center">
+        <div class="w-11 h-11 sm:w-12 sm:h-12 mx-auto mb-3 rounded-xl gradient-brand flex items-center justify-center text-white">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 01-1.043 3.296 3.745 3.745 0 01-3.296 1.043A3.745 3.745 0 0112 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 01-3.296-1.043 3.745 3.745 0 01-1.043-3.296A3.745 3.745 0 013 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 011.043-3.296 3.746 3.746 0 013.296-1.043A3.746 3.746 0 0112 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 013.296 1.043 3.746 3.746 0 011.043 3.296A3.745 3.745 0 0121 12z"/></svg>
+        </div>
+        <p class="text-[13px] sm:text-[14px] font-bold text-navy mb-1">Secure Payment</p>
+        <p class="text-[11px] sm:text-[12px] text-slate">Encrypted checkout</p>
+      </div>
+
+      <div class="text-center">
+        <div class="w-11 h-11 sm:w-12 sm:h-12 mx-auto mb-3 rounded-xl gradient-brand flex items-center justify-center text-white">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99"/></svg>
+        </div>
+        <p class="text-[13px] sm:text-[14px] font-bold text-navy mb-1">Easy Returns</p>
+        <p class="text-[11px] sm:text-[12px] text-slate">Within 7 days</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ================= NEWSLETTER ================= -->
+<section class="bg-white">
+  <div class="max-w-[1280px] mx-auto px-4 xs:px-5 sm:px-6 lg:px-10 py-14 sm:py-16 lg:py-20">
+    <div class="grid md:grid-cols-12 gap-8 md:gap-12 items-center">
+      <div class="md:col-span-5">
+        <div class="inline-flex items-center gap-2.5 mb-4 sm:mb-5">
+          <span class="accent-dot"></span>
+          <span class="micro text-green">The Journal</span>
+        </div>
+        <h2 class="display-md text-navy">Notes on living well.</h2>
+      </div>
+      <div class="md:col-span-6 md:col-start-7">
+        <p class="text-slate text-[14px] sm:text-[15px] leading-[1.8] mb-5 sm:mb-6">
+          Monthly letters on nutrition, movement, and mindful health. Never more than twice a month — and always worth reading.
+        </p>
+        <form class="flex flex-col xs:flex-row items-stretch xs:items-center bg-mist border border-line focus-within:border-blue rounded-xl p-1.5 xs:pl-5 transition gap-2 xs:gap-0">
+          <input type="email" placeholder="Your email address"
+                 class="flex-1 bg-transparent py-3 px-3 xs:px-0 text-[14px] outline-none placeholder:text-slate/60 text-navy min-w-0"/>
+          <button type="submit" class="btn-primary text-[13px] font-semibold px-6 py-3 xs:py-2.5 shrink-0">
+            Subscribe
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= FOOTER ================= -->
+<footer class="bg-deep text-white">
+  <div class="max-w-[1280px] mx-auto px-4 xs:px-5 sm:px-6 lg:px-10 py-14 sm:py-16 lg:py-20">
+
+    <div class="grid grid-cols-2 md:grid-cols-12 gap-y-10 gap-x-6 md:gap-12 pb-12 sm:pb-14 border-b border-white/10">
+
+      <div class="col-span-2 md:col-span-5">
+        <div class="flex items-center gap-3 mb-5 sm:mb-6">
+          <svg viewBox="0 0 100 100" class="w-9 h-9 sm:w-10 sm:h-10">
+            <defs>
+              <linearGradient id="hb-footer" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#2b8bc9"/>
+                <stop offset="100%" stop-color="#3aa76d"/>
+              </linearGradient>
+            </defs>
+            <path d="M38 8 h24 a6 6 0 0 1 6 6 v18 h18 a6 6 0 0 1 6 6 v24 a6 6 0 0 1 -6 6 H68 v18 a6 6 0 0 1 -6 6 H38 a6 6 0 0 1 -6 -6 V68 H14 a6 6 0 0 1 -6 -6 V38 a6 6 0 0 1 6 -6 h18 V14 a6 6 0 0 1 6 -6 z" fill="url(#hb-footer)"/>
+            <circle cx="50" cy="34" r="6" fill="#0d2f4d"/>
+            <path d="M32 44 Q40 40 46 46 M68 44 Q60 40 54 46" stroke="#0d2f4d" stroke-width="4" stroke-linecap="round" fill="none"/>
+            <path d="M44 60 Q58 52 66 62 Q64 74 50 74 Q44 68 44 60 z" fill="#7fc341"/>
+          </svg>
+          <div>
+            <div class="text-[20px] sm:text-[22px] font-extrabold">
+              <span class="text-white">Health</span><span class="text-lime">Buddy</span>
+            </div>
+            <div class="micro text-white/40 mt-1.5" style="font-size:8.5px;">Better Health · Happier You</div>
+          </div>
+        </div>
+        <p class="text-[13px] sm:text-[14px] leading-[1.8] text-white/60 max-w-[380px]">
+          Considered health, expertly delivered. Lagos, Nigeria — serving clients nationwide.
+        </p>
+      </div>
+
+      <div class="md:col-span-2 md:col-start-7">
+        <p class="micro text-white/40 mb-4 sm:mb-5">Shop</p>
+        <ul class="space-y-3 sm:space-y-3.5 text-[13px] sm:text-[14px]">
+          <li><a href="shop.html" class="text-white/70 hover:text-white transition">All Products</a></li>
+          <li><a href="#" class="text-white/70 hover:text-white transition">Supplements</a></li>
+          <li><a href="#" class="text-white/70 hover:text-white transition">Wellness</a></li>
+        </ul>
+      </div>
+
+      <div class="md:col-span-2">
+        <p class="micro text-white/40 mb-4 sm:mb-5">Care</p>
+        <ul class="space-y-3 sm:space-y-3.5 text-[13px] sm:text-[14px]">
+          <li><a href="consult.html" class="text-white/70 hover:text-white transition">Consultations</a></li>
+          <li><a href="#" class="text-white/70 hover:text-white transition">Practitioners</a></li>
+          <li><a href="#" class="text-white/70 hover:text-white transition">Journal</a></li>
+        </ul>
+      </div>
+
+      <div class="col-span-2 md:col-span-2">
+        <p class="micro text-white/40 mb-4 sm:mb-5">Contact</p>
+        <ul class="space-y-3 sm:space-y-3.5 text-[13px] sm:text-[14px]">
+          <li><a href="mailto:hello@healthbuddy.ng" class="text-white/70 hover:text-white transition break-all">hello@healthbuddy.ng</a></li>
+          <li><a href="#" class="text-white/70 hover:text-white transition">+234 · Lagos</a></li>
+          <li><a href="#" class="text-white/70 hover:text-white transition">Instagram</a></li>
+        </ul>
+      </div>
+
+    </div>
+
+    <div class="pt-6 sm:pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 sm:gap-6 text-center sm:text-left">
+      <p class="micro text-white/40">© 2026 HealthBuddy — All rights reserved</p>
+      <div class="flex flex-wrap justify-center gap-x-6 gap-y-2 sm:gap-8">
+        <a href="#" class="micro text-white/40 hover:text-white transition">Privacy</a>
+        <a href="#" class="micro text-white/40 hover:text-white transition">Terms</a>
+        <a href="#" class="micro text-white/40 hover:text-white transition">Disclaimer</a>
+      </div>
+    </div>
+
+  </div>
+</footer>
+
+<!-- ================= MOBILE FILTER DRAWER ================= -->
+<div id="filterBackdrop" class="filter-drawer-backdrop lg:hidden"></div>
+<div id="filterDrawer" class="filter-drawer lg:hidden max-h-[88vh] bottom-0 top-auto">
+  <!-- Handle bar -->
+  <div class="flex justify-center pt-3 pb-2">
+    <div class="w-10 h-1 rounded-full bg-line"></div>
+  </div>
+
+  <!-- Drawer header -->
+  <div class="flex items-center justify-between px-5 pb-4 border-b border-line">
+    <h3 class="text-[17px] font-bold text-navy">Filters</h3>
+    <button id="closeFilter" class="p-2 -mr-2" aria-label="Close filters">
+      <svg class="w-5 h-5 text-navy" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+    </button>
+  </div>
+
+  <!-- Drawer body -->
+  <div class="flex-1 overflow-y-auto px-5 py-5">
+
+    <!-- Category -->
+    <div class="mb-6">
+      <p class="micro text-slate mb-3">Category</p>
+      <div class="grid grid-cols-2 gap-2">
+        <label class="check-item">
+          <input type="checkbox" checked/>
+          <span class="check-box"></span>
+          <span class="check-label">Supplements</span>
+        </label>
+        <label class="check-item">
+          <input type="checkbox"/>
+          <span class="check-box"></span>
+          <span class="check-label">Vitamins</span>
+        </label>
+        <label class="check-item">
+          <input type="checkbox"/>
+          <span class="check-box"></span>
+          <span class="check-label">Herbal</span>
+        </label>
+        <label class="check-item">
+          <input type="checkbox"/>
+          <span class="check-box"></span>
+          <span class="check-label">Devices</span>
+        </label>
+        <label class="check-item">
+          <input type="checkbox"/>
+          <span class="check-box"></span>
+          <span class="check-label">Wellness</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Price -->
+    <div class="mb-6 pb-6 border-b border-line">
+      <p class="micro text-slate mb-3">Price Range</p>
+      <input type="range" min="0" max="50000" value="25000" step="1000" id="priceRangeMobile"/>
+      <div class="flex items-center justify-between text-[13px] text-slate mt-3">
+        <span>₦0</span>
+        <span class="text-navy font-bold" id="priceLabelMobile">₦25,000</span>
+        <span>₦50,000</span>
+      </div>
+    </div>
+
+    <!-- Rating -->
+    <div class="mb-6 pb-6 border-b border-line">
+      <p class="micro text-slate mb-3">Rating</p>
+      <div class="space-y-1">
+        <label class="radio-item">
+          <input type="radio" name="rating-mobile"/>
+          <span class="radio-circle"></span>
+          <span class="radio-label">⭐⭐⭐⭐⭐ <span class="text-slate/60">5.0</span></span>
+        </label>
+        <label class="radio-item">
+          <input type="radio" name="rating-mobile" checked/>
+          <span class="radio-circle"></span>
+          <span class="radio-label">⭐⭐⭐⭐ & up <span class="text-slate/60">4.0</span></span>
+        </label>
+        <label class="radio-item">
+          <input type="radio" name="rating-mobile"/>
+          <span class="radio-circle"></span>
+          <span class="radio-label">⭐⭐⭐ & up <span class="text-slate/60">3.0</span></span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Availability -->
+    <div>
+      <p class="micro text-slate mb-3">Availability</p>
+      <div class="space-y-1">
+        <label class="check-item">
+          <input type="checkbox" checked/>
+          <span class="check-box"></span>
+          <span class="check-label">In stock</span>
+        </label>
+        <label class="check-item">
+          <input type="checkbox"/>
+          <span class="check-box"></span>
+          <span class="check-label">On sale</span>
+        </label>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Drawer footer -->
+  <div class="border-t border-line p-5 bg-white flex items-center gap-3" style="padding-bottom: max(20px, env(safe-area-inset-bottom));">
+    <button id="clearFilter" class="btn-outline px-5 py-3 text-[13px] font-semibold shrink-0">Clear</button>
+    <button id="applyFilter" class="btn-primary flex-1 py-3 text-[13px] font-semibold">Apply Filters</button>
+  </div>
+</div>
+
+<!-- ================= SCRIPTS ================= -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+<script>
+  /* ============ MOBILE MENU ============ */
+  const menuBtn = document.getElementById('menuBtn');
+  const closeBtn = document.getElementById('closeBtn');
+  const mobileMenu = document.getElementById('mobileMenu');
+  const backdrop = document.getElementById('menuBackdrop');
+
+  function openMenu() {
+    mobileMenu.classList.add('is-open');
+    backdrop.classList.add('is-open');
+    menuBtn.classList.add('is-open');
+    document.body.classList.add('menu-open');
+  }
+  function closeMenu() {
+    mobileMenu.classList.remove('is-open');
+    backdrop.classList.remove('is-open');
+    menuBtn.classList.remove('is-open');
+    document.body.classList.remove('menu-open');
+  }
+  menuBtn.addEventListener('click', () => {
+    mobileMenu.classList.contains('is-open') ? closeMenu() : openMenu();
+  });
+  closeBtn.addEventListener('click', closeMenu);
+  backdrop.addEventListener('click', closeMenu);
+  mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMenu));
+
+  /* ============ MOBILE FILTER DRAWER ============ */
+  const filterBtn = document.getElementById('filterBtn');
+  const filterDrawer = document.getElementById('filterDrawer');
+  const filterBackdrop = document.getElementById('filterBackdrop');
+  const closeFilter = document.getElementById('closeFilter');
+  const applyFilter = document.getElementById('applyFilter');
+  const clearFilter = document.getElementById('clearFilter');
+
+  function openFilter() {
+    filterDrawer.classList.add('is-open');
+    filterBackdrop.classList.add('is-open');
+    document.body.classList.add('menu-open');
+  }
+  function closeFilterFn() {
+    filterDrawer.classList.remove('is-open');
+    filterBackdrop.classList.remove('is-open');
+    document.body.classList.remove('menu-open');
+  }
+
+  filterBtn.addEventListener('click', openFilter);
+  closeFilter.addEventListener('click', closeFilterFn);
+  filterBackdrop.addEventListener('click', closeFilterFn);
+  applyFilter.addEventListener('click', closeFilterFn);
+  clearFilter.addEventListener('click', () => {
+    document.querySelectorAll('#filterDrawer input[type="checkbox"]').forEach(i => i.checked = false);
+    document.querySelectorAll('#filterDrawer input[type="radio"]').forEach(i => i.checked = false);
+  });
+
+  /* ============ PRICE RANGE LABELS ============ */
+  const priceRange = document.getElementById('priceRange');
+  const priceLabel = document.getElementById('priceLabel');
+  if (priceRange) {
+    priceRange.addEventListener('input', (e) => {
+      priceLabel.textContent = '₦' + Number(e.target.value).toLocaleString();
+    });
+  }
+  const priceRangeMobile = document.getElementById('priceRangeMobile');
+  const priceLabelMobile = document.getElementById('priceLabelMobile');
+  if (priceRangeMobile) {
+    priceRangeMobile.addEventListener('input', (e) => {
+      priceLabelMobile.textContent = '₦' + Number(e.target.value).toLocaleString();
+    });
+  }
+
+  /* ============ VIEW TOGGLE ============ */
+  const viewBtns = document.querySelectorAll('.view-btn');
+  const grid = document.getElementById('productGrid');
+  viewBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      viewBtns.forEach(b => { b.classList.remove('active', 'text-navy'); b.classList.add('text-slate'); });
+      btn.classList.add('active', 'text-navy');
+      btn.classList.remove('text-slate');
+
+      const view = btn.dataset.view;
+      if (view === 'list') {
+        grid.classList.remove('grid-cols-1','xs:grid-cols-2','lg:grid-cols-2','xl:grid-cols-3');
+        grid.classList.add('grid-cols-1');
+        document.querySelectorAll('.product-card').forEach(card => {
+          card.classList.add('!flex');
+          const media = card.querySelector('div');
+          if (media) media.classList.add('!w-[180px]', 'sm:!w-[240px]', '!shrink-0', 'aspect-square');
+        });
+      } else {
+        grid.classList.remove('grid-cols-1');
+        grid.classList.add('grid-cols-1','xs:grid-cols-2','lg:grid-cols-2','xl:grid-cols-3');
+        document.querySelectorAll('.product-card').forEach(card => {
+          card.classList.remove('!flex');
+          const media = card.querySelector('div');
+          if (media) media.classList.remove('!w-[180px]', 'sm:!w-[240px]', '!shrink-0', 'aspect-square');
+        });
+      }
+    });
+  });
+
+  /* ============ SWIPER — FEATURED ============ */
+  new Swiper('.featSwiper', {
+    slidesPerView: 1.5,
+    spaceBetween: 12,
+    speed: 800,
+    grabCursor: true,
+    navigation: { nextEl: '.feat-next', prevEl: '.feat-prev' },
+    breakpoints: {
+      480:  { slidesPerView: 2,   spaceBetween: 14 },
+      640:  { slidesPerView: 2.5, spaceBetween: 16 },
+      768:  { slidesPerView: 3,   spaceBetween: 18 },
+      1024: { slidesPerView: 4,   spaceBetween: 20 },
+      1280: { slidesPerView: 5,   spaceBetween: 20 }
+    }
+  });
+
+  /* ============ SCROLL REVEAL ============ */
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-in');
+        io.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  /* ============ NAV SCROLL ============ */
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('nav-scrolled', window.scrollY > 30);
+  }, { passive: true });
+
+  /* ============ RESIZE ============ */
+  window.addEventListener('resize', () => {
+    if (window.innerWidth >= 768 && mobileMenu.classList.contains('is-open')) closeMenu();
+    if (window.innerWidth >= 1024 && filterDrawer.classList.contains('is-open')) closeFilterFn();
+  });
+</script>
+
+</body>
+</html>

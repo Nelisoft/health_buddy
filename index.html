@@ -1,0 +1,1290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+<meta name="theme-color" content="#1a4a7a"/>
+<title>HealthBuddy — Better Health · Happier You</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        fontFamily: { sans: ['Inter', 'sans-serif'] },
+        colors: {
+          navy:  '#1a4a7a',
+          blue:  '#2b8bc9',
+          green: '#3aa76d',
+          lime:  '#7fc341',
+          slate: '#5b6b75',
+          mist:  '#f7f9fb',
+          cloud: '#ffffff',
+          line:  '#e4eaf0',
+          tint:  '#eef5f9',
+          deep:  '#0d2f4d',
+        },
+        letterSpacing: { micro: '0.16em' },
+        screens: {
+          'xs': '480px',
+        }
+      }
+    }
+  }
+</script>
+
+<style>
+  html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
+  body { font-feature-settings: "ss01","cv11","cv02"; }
+
+  /* Fluid typography with clamp() — scales smoothly across viewports */
+  .display {
+    font-weight: 700;
+    letter-spacing: -0.035em;
+    line-height: 1.05;
+    font-size: clamp(2rem, 6vw, 4.5rem);
+  }
+  .display-md {
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    font-size: clamp(1.75rem, 4.5vw, 2.75rem);
+  }
+  .display-sm {
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+    font-size: clamp(1.5rem, 3.5vw, 2.25rem);
+  }
+
+  .micro {
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+  @media (max-width: 480px) {
+    .micro { font-size: 10px; letter-spacing: 0.14em; }
+  }
+
+  .gradient-text {
+    background: linear-gradient(120deg, #2b8bc9 0%, #3aa76d 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .gradient-brand {
+    background: linear-gradient(120deg, #2b8bc9 0%, #3aa76d 100%);
+  }
+
+  .rule { border-top: 1px solid #e4eaf0; }
+
+  /* ============ BUTTONS ============ */
+  .btn-primary {
+    position: relative; overflow: hidden;
+    background: #1a4a7a; color: #fff;
+    transition: color .5s cubic-bezier(.22,1,.36,1);
+    z-index: 1;
+    border-radius: 6px;
+    min-height: 44px;
+  }
+  .btn-primary::before {
+    content:''; position: absolute; inset: 0;
+    background: linear-gradient(120deg, #2b8bc9 0%, #3aa76d 100%);
+    transform: translateY(101%);
+    transition: transform .6s cubic-bezier(.22,1,.36,1);
+    z-index: -1;
+  }
+  .btn-primary:hover::before { transform: translateY(0); }
+
+  .btn-outline {
+    position: relative; overflow: hidden;
+    border: 1.5px solid #1a4a7a; color: #1a4a7a;
+    background: transparent;
+    transition: color .5s cubic-bezier(.22,1,.36,1);
+    z-index: 1;
+    border-radius: 6px;
+    min-height: 44px;
+  }
+  .btn-outline::before {
+    content:''; position: absolute; inset: 0;
+    background: #1a4a7a;
+    transform: translateY(101%);
+    transition: transform .6s cubic-bezier(.22,1,.36,1);
+    z-index: -1;
+  }
+  .btn-outline:hover { color: #fff; }
+  .btn-outline:hover::before { transform: translateY(0); }
+
+  .btn-light {
+    position: relative; overflow: hidden;
+    background: #fff; color: #1a4a7a;
+    transition: color .5s cubic-bezier(.22,1,.36,1);
+    z-index: 1;
+    border-radius: 6px;
+    min-height: 44px;
+  }
+  .btn-light::before {
+    content:''; position: absolute; inset: 0;
+    background: #f7f9fb;
+    transform: translateY(101%);
+    transition: transform .6s cubic-bezier(.22,1,.36,1);
+    z-index: -1;
+  }
+  .btn-light:hover::before { transform: translateY(0); }
+
+  /* ============ UNDERLINE ============ */
+  .hover-underline {
+    background-image: linear-gradient(currentColor, currentColor);
+    background-size: 0% 1px;
+    background-repeat: no-repeat;
+    background-position: 0 100%;
+    transition: background-size .5s cubic-bezier(.22,1,.36,1);
+    padding-bottom: 2px;
+  }
+  .hover-underline:hover { background-size: 100% 1px; }
+
+  /* ============ IMAGE TREATMENT ============ */
+  .img-zoom img {
+    transition: transform 1.6s cubic-bezier(.22,1,.36,1);
+  }
+  @media (hover: hover) {
+    .img-zoom:hover img { transform: scale(1.05); }
+  }
+
+  /* ============ REVEAL ============ */
+  .reveal {
+    opacity: 0;
+    transform: translateY(28px);
+    transition:
+      opacity 1s cubic-bezier(.22,1,.36,1),
+      transform 1s cubic-bezier(.22,1,.36,1);
+  }
+  .reveal.is-in { opacity: 1; transform: translateY(0); }
+  .reveal-delay-1 { transition-delay: .1s; }
+  .reveal-delay-2 { transition-delay: .2s; }
+  .reveal-delay-3 { transition-delay: .3s; }
+
+  /* Hero slide stagger */
+  .hero-slide .stagger > * {
+    opacity: 0;
+    transform: translateY(22px);
+    transition: opacity .9s ease, transform .9s cubic-bezier(.22,1,.36,1);
+  }
+  .hero-slide.swiper-slide-active .stagger > *:nth-child(1) { transition-delay:.2s; opacity:1; transform:none; }
+  .hero-slide.swiper-slide-active .stagger > *:nth-child(2) { transition-delay:.35s; opacity:1; transform:none; }
+  .hero-slide.swiper-slide-active .stagger > *:nth-child(3) { transition-delay:.5s; opacity:1; transform:none; }
+  .hero-slide.swiper-slide-active .stagger > *:nth-child(4) { transition-delay:.65s; opacity:1; transform:none; }
+
+  /* ============ NAV ============ */
+  .nav-scrolled {
+    background: rgba(255,255,255,.94);
+    backdrop-filter: blur(14px);
+    border-bottom-color: #e4eaf0;
+    box-shadow: 0 1px 0 rgba(26,74,122,.04);
+  }
+
+  /* ============ MOBILE MENU ============ */
+  .mobile-menu {
+    position: fixed;
+    inset: 0;
+    background: #ffffff;
+    z-index: 100;
+    transform: translateX(100%);
+    transition: transform .5s cubic-bezier(.22,1,.36,1);
+    display: flex;
+    flex-direction: column;
+    padding: 24px;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .mobile-menu.is-open { transform: translateX(0); }
+
+  .mobile-menu-backdrop {
+    position: fixed; inset: 0;
+    background: rgba(13,47,77,.4);
+    backdrop-filter: blur(4px);
+    z-index: 99;
+    opacity: 0; pointer-events: none;
+    transition: opacity .4s ease;
+  }
+  .mobile-menu-backdrop.is-open { opacity: 1; pointer-events: auto; }
+
+  .mobile-menu a {
+    display: block;
+    padding: 18px 0;
+    border-bottom: 1px solid #e4eaf0;
+    font-size: 20px;
+    font-weight: 600;
+    color: #1a4a7a;
+    transition: color .3s ease, padding-left .3s ease;
+  }
+  .mobile-menu a:hover { color: #2b8bc9; padding-left: 6px; }
+
+  body.menu-open { overflow: hidden; }
+
+  /* Hamburger animation */
+  .hamburger span {
+    display: block;
+    width: 22px;
+    height: 2px;
+    background: #1a4a7a;
+    border-radius: 2px;
+    transition: all .4s cubic-bezier(.22,1,.36,1);
+  }
+  .hamburger span + span { margin-top: 5px; }
+  .hamburger.is-open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .hamburger.is-open span:nth-child(2) { opacity: 0; }
+  .hamburger.is-open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+  /* ============ MARQUEE ============ */
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+  .marquee-track {
+    display: flex;
+    width: max-content;
+    animation: marquee 45s linear infinite;
+  }
+  .marquee-track:hover { animation-play-state: paused; }
+
+  /* ============ SWIPER ============ */
+  .swiper-pagination-bullet {
+    width: 8px; height: 8px;
+    background: #1a4a7a;
+    opacity: .2;
+    transition: all .4s ease;
+    margin: 0 4px !important;
+  }
+  .swiper-pagination-bullet-active {
+    opacity: 1;
+    background: linear-gradient(120deg, #2b8bc9, #3aa76d);
+    width: 28px;
+    border-radius: 4px;
+  }
+
+  .swiper-btn {
+    width: 44px; height: 44px;
+    border: 1px solid #e4eaf0;
+    background: #fff;
+    display: inline-flex; align-items: center; justify-content: center;
+    transition: all .4s cubic-bezier(.22,1,.36,1);
+    cursor: pointer;
+    border-radius: 8px;
+    color: #1a4a7a;
+    flex-shrink: 0;
+  }
+  @media (min-width: 768px) {
+    .swiper-btn { width: 48px; height: 48px; }
+  }
+  .swiper-btn:hover {
+    background: #1a4a7a;
+    border-color: #1a4a7a;
+    color: #fff;
+  }
+  .swiper-btn svg { transition: transform .4s cubic-bezier(.22,1,.36,1); }
+  .swiper-btn:hover svg { transform: translateX(2px); }
+  .swiper-btn.prev:hover svg { transform: translateX(-2px); }
+
+  /* Hide swiper arrows on smallest screens — swipe is enough */
+  @media (max-width: 640px) {
+    .mobile-hide-nav { display: none !important; }
+  }
+
+  /* ============ ACCENT DOT ============ */
+  .accent-dot {
+    display: inline-block;
+    width: 6px; height: 6px;
+    border-radius: 999px;
+    background: linear-gradient(120deg, #2b8bc9, #3aa76d);
+    flex-shrink: 0;
+  }
+
+  /* Prevent horizontal scroll */
+  body, html { overflow-x: hidden; max-width: 100vw; }
+
+  /* Reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    * { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+    .reveal { opacity: 1 !important; transform: none !important; }
+  }
+</style>
+</head>
+
+<body class="bg-mist text-navy font-sans">
+
+<!-- ================= TOP BAR (hidden on very small) ================= -->
+<div class="bg-navy text-white/85">
+  <div class="max-w-[1280px] mx-auto px-4 xs:px-5 sm:px-6 lg:px-10 py-2.5 flex items-center justify-between gap-4">
+    <p class="micro text-white/75 truncate">Free delivery · Orders above ₦50,000</p>
+    <div class="hidden sm:flex items-center gap-6 lg:gap-8 shrink-0">
+      <a href="#" class="micro text-white/75 hover:text-white transition">Journal</a>
+      <a href="#" class="micro text-white/75 hover:text-white transition">Support</a>
+    </div>
+  </div>
+</div>
+
+<!-- ================= NAVBAR ================= -->
+<header id="nav" class="bg-white/80 backdrop-blur-md sticky top-0 z-50 border-b border-transparent transition-all duration-500">
+  <div class="max-w-[1280px] mx-auto px-4 xs:px-5 sm:px-6 lg:px-10 flex items-center justify-between h-[72px] sm:h-[80px] lg:h-[84px] gap-4">
+
+    <!-- Logo -->
+    <a href="index.html" class="flex items-center gap-2.5 sm:gap-3 group shrink-0 min-w-0">
+      <svg viewBox="0 0 100 100" class="w-8 h-8 sm:w-9 sm:h-9 lg:w-10 lg:h-10 transition-transform duration-700 group-hover:rotate-[6deg] shrink-0">
+        <defs>
+          <linearGradient id="hb" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#2b8bc9"/>
+            <stop offset="100%" stop-color="#3aa76d"/>
+          </linearGradient>
+        </defs>
+        <path d="M38 8 h24 a6 6 0 0 1 6 6 v18 h18 a6 6 0 0 1 6 6 v24 a6 6 0 0 1 -6 6 H68 v18 a6 6 0 0 1 -6 6 H38 a6 6 0 0 1 -6 -6 V68 H14 a6 6 0 0 1 -6 -6 V38 a6 6 0 0 1 6 -6 h18 V14 a6 6 0 0 1 6 -6 z" fill="url(#hb)"/>
+        <circle cx="50" cy="34" r="6" fill="white"/>
+        <path d="M32 44 Q40 40 46 46 M68 44 Q60 40 54 46" stroke="white" stroke-width="4" stroke-linecap="round" fill="none"/>
+        <path d="M44 60 Q58 52 66 62 Q64 74 50 74 Q44 68 44 60 z" fill="#7fc341"/>
+      </svg>
+      <div class="leading-none min-w-0">
+        <div class="text-[18px] sm:text-[20px] lg:text-[24px] font-extrabold tracking-tight whitespace-nowrap">
+          <span class="text-navy">Health</span><span class="text-green">Buddy</span>
+        </div>
+        <div class="micro text-slate mt-1 hidden xs:block" style="font-size:8.5px;">Better Health · Happier You</div>
+      </div>
+    </a>
+
+    <!-- Desktop nav -->
+    <nav class="hidden md:flex items-center gap-6 lg:gap-10 text-[14px] font-medium text-slate">
+      <a href="shop.html" class="hover-underline hover:text-navy transition">Shop</a>
+      <a href="consult.html" class="hover-underline hover:text-navy transition">Consult</a>
+      <a href="#" class="hover-underline hover:text-navy transition">Practitioners</a>
+      <a href="about.html" class="hover-underline hover:text-navy transition hidden lg:inline">About</a>
+      <a href="contact.html" class="hover-underline hover:text-navy transition hidden lg:inline">Contact</a>
+    </nav>
+
+    <!-- Actions -->
+    <div class="flex items-center gap-2 sm:gap-4 shrink-0">
+      <a href="#" class="hidden lg:inline text-[14px] text-slate hover:text-navy font-medium transition">Sign in</a>
+
+      <a href="cart.html" class="relative p-2 text-slate hover:text-navy transition" aria-label="Cart">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5M4.5 8.25h15l-1.2 12a1.5 1.5 0 01-1.5 1.35H6.2a1.5 1.5 0 01-1.5-1.35L3.5 8.25h.995z"/>
+        </svg>
+        <span class="absolute top-1 right-1 w-3.5 h-3.5 bg-gradient-to-br from-blue to-green text-white text-[8px] font-bold rounded-full flex items-center justify-center">2</span>
+      </a>
+
+      <!-- CTA — desktop only -->
+      <a href="consult.html" class="hidden md:inline-flex btn-primary px-4 lg:px-5 py-2.5 text-[13px] font-semibold items-center">
+        Book Consultation
+      </a>
+
+      <!-- Hamburger — mobile only -->
+      <button id="menuBtn" class="hamburger md:hidden p-2.5 -mr-2" aria-label="Open menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- ================= MOBILE MENU ================= -->
+<div id="menuBackdrop" class="mobile-menu-backdrop md:hidden"></div>
+<div id="mobileMenu" class="mobile-menu md:hidden">
+  <div class="flex items-center justify-between mb-8 pb-6 border-b border-line">
+    <div class="flex items-center gap-3">
+      <svg viewBox="0 0 100 100" class="w-9 h-9">
+        <defs>
+          <linearGradient id="hb-menu" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#2b8bc9"/>
+            <stop offset="100%" stop-color="#3aa76d"/>
+          </linearGradient>
+        </defs>
+        <path d="M38 8 h24 a6 6 0 0 1 6 6 v18 h18 a6 6 0 0 1 6 6 v24 a6 6 0 0 1 -6 6 H68 v18 a6 6 0 0 1 -6 6 H38 a6 6 0 0 1 -6 -6 V68 H14 a6 6 0 0 1 -6 -6 V38 a6 6 0 0 1 6 -6 h18 V14 a6 6 0 0 1 6 -6 z" fill="url(#hb-menu)"/>
+        <circle cx="50" cy="34" r="6" fill="white"/>
+        <path d="M32 44 Q40 40 46 46 M68 44 Q60 40 54 46" stroke="white" stroke-width="4" stroke-linecap="round" fill="none"/>
+        <path d="M44 60 Q58 52 66 62 Q64 74 50 74 Q44 68 44 60 z" fill="#7fc341"/>
+      </svg>
+      <div class="text-[20px] font-extrabold">
+        <span class="text-navy">Health</span><span class="text-green">Buddy</span>
+      </div>
+    </div>
+    <button id="closeBtn" class="p-2 -mr-2" aria-label="Close menu">
+      <svg class="w-6 h-6 text-navy" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+    </button>
+  </div>
+
+  <nav class="flex-1">
+    <a href="shop.html">Shop</a>
+    <a href="consult.html">Consult</a>
+    <a href="#">Practitioners</a>
+    <a href="#">About</a>
+    <a href="#">Journal</a>
+    <a href="#">Sign in</a>
+  </nav>
+
+  <div class="mt-8 pt-6 border-t border-line space-y-3">
+    <a href="shop.html" class="block w-full text-center btn-outline py-3.5 font-semibold text-[14px]">Shop Products</a>
+    <a href="consult.html" class="block w-full text-center btn-primary py-3.5 font-semibold text-[14px]">Book Consultation</a>
+  </div>
+
+  <p class="micro text-slate mt-8 text-center">Better Health · Happier You</p>
+</div>
+
+<!-- ================= HERO (SWIPER) ================= -->
+<section class="bg-white border-b border-line">
+  <div class="max-w-[1280px] mx-auto px-4 xs:px-5 sm:px-6 lg:px-10 pt-8 sm:pt-10 lg:pt-16 pb-12 sm:pb-14 lg:pb-20">
+    <div class="swiper heroSwiper">
+      <div class="swiper-wrapper">
+
+        <!-- Slide 1 -->
+        <div class="swiper-slide hero-slide">
+          <div class="grid md:grid-cols-12 gap-8 sm:gap-10 lg:gap-20 items-center">
+
+            <!-- Text — order 1 on mobile, left on desktop -->
+            <div class="md:col-span-6 stagger order-1">
+              <div class="inline-flex items-center gap-2.5 bg-tint border border-line px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-full mb-6 sm:mb-7">
+                <span class="accent-dot"></span>
+                <span class="micro text-navy">Trusted by 10,000+ Nigerians</span>
+              </div>
+
+              <h1 class="display text-navy mb-5 sm:mb-6 lg:mb-8">
+                Better health,<br/>
+                <span class="gradient-text">happier you.</span>
+              </h1>
+
+              <p class="text-slate text-[15px] sm:text-[16px] lg:text-[17px] leading-[1.7] mb-8 sm:mb-9 lg:mb-10 max-w-[480px]">
+                A curated collection of certified health products and licensed practitioners — carefully selected, professionally delivered.
+              </p>
+
+              <div class="flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-4 mb-10 sm:mb-12 lg:mb-14">
+                <a href="shop.html" class="btn-primary w-full sm:w-auto px-6 lg:px-7 py-3.5 lg:py-4 text-[14px] font-semibold inline-flex items-center justify-center gap-2">
+                  Shop Products
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+                </a>
+                <a href="consult.html" class="btn-outline w-full sm:w-auto px-6 lg:px-7 py-3.5 lg:py-4 text-[14px] font-semibold text-center">
+                  Book Consultation
+                </a>
+              </div>
+
+              <div class="flex flex-wrap items-center gap-x-5 gap-y-3 text-[12px] sm:text-[13px] text-slate">
+                <div class="flex items-center gap-2">
+                  <svg class="w-4 h-4 text-green shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.7 5.3a1 1 0 010 1.4l-8 8a1 1 0 01-1.4 0l-4-4a1 1 0 111.4-1.4L8 12.6l7.3-7.3a1 1 0 011.4 0z" clip-rule="evenodd"/></svg>
+                  <span class="font-medium">NAFDAC Certified</span>
+                </div>
+                <div class="flex items-center gap-2">
+                  <svg class="w-4 h-4 text-green shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.7 5.3a1 1 0 010 1.4l-8 8a1 1 0 01-1.4 0l-4-4a1 1 0 111.4-1.4L8 12.6l7.3-7.3a1 1 0 011.4 0z" clip-rule="evenodd"/></svg>
+                  <span class="font-medium">Licensed Practitioners</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Image — order 2 on mobile (below), right on desktop -->
+            <div class="md:col-span-6 order-2">
+              <div class="relative">
+                <div class="aspect-[4/5] sm:aspect-[5/6] md:aspect-[4/5] rounded-xl sm:rounded-2xl overflow-hidden img-zoom shadow-[0_20px_60px_-20px_rgba(26,74,122,.28)] lg:shadow-[0_30px_80px_-30px_rgba(26,74,122,.28)]">
+                  <img src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=1200" class="w-full h-full object-cover" alt="Health and wellness"/>
+                </div>
+
+                <!-- Floating feature card — smaller on mobile, repositioned -->
+                <div class="absolute -bottom-4 sm:-bottom-5 lg:-bottom-6 left-2 sm:-left-4 lg:-left-6 bg-white rounded-xl sm:rounded-2xl p-3.5 sm:p-4 lg:p-5 w-[200px] sm:w-[220px] lg:w-[260px] shadow-[0_16px_40px_-12px_rgba(26,74,122,.24)] lg:shadow-[0_20px_50px_-15px_rgba(26,74,122,.22)] border border-line">
+                  <div class="flex items-center gap-2.5 mb-2.5 sm:mb-3 lg:mb-4">
+                    <div class="w-8 h-8 sm:w-9 sm:h-9 lg:w-11 lg:h-11 rounded-lg sm:rounded-xl gradient-brand flex items-center justify-center text-white font-bold text-[13px] sm:text-[14px] lg:text-base shrink-0">V</div>
+                    <div class="min-w-0">
+                      <p class="micro text-slate" style="font-size:8px;">Featured</p>
+                      <p class="text-[12px] sm:text-[13px] lg:text-[14px] font-bold text-navy truncate">Vitamin D3</p>
+                    </div>
+                  </div>
+                  <div class="flex items-center justify-between">
+                    <span class="text-navy font-bold text-[13px] sm:text-[14px] lg:text-[15px]">₦12,500</span>
+                    <span class="text-[10px] lg:text-[11px] text-green font-semibold">In stock</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Slide 2 -->
+        <div class="swiper-slide hero-slide">
+          <div class="grid md:grid-cols-12 gap-8 sm:gap-10 lg:gap-20 items-center">
+
+            <div class="md:col-span-6 stagger order-1">
+              <div class="inline-flex items-center gap-2.5 bg-tint border border-line px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-full mb-6 sm:mb-7">
+                <span class="accent-dot"></span>
+                <span class="micro text-navy">Private Consultation</span>
+              </div>
+
+              <h1 class="display text-navy mb-5 sm:mb-6 lg:mb-8">
+                Speak with<br/>
+                <span class="gradient-text">someone who cares.</span>
+              </h1>
+
+              <p class="text-slate text-[15px] sm:text-[16px] lg:text-[17px] leading-[1.7] mb-8 sm:mb-9 lg:mb-10 max-w-[480px]">
+                Book a private thirty-minute session with a licensed practitioner — personalised guidance, without the waiting room.
+              </p>
+
+              <div class="flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-4 mb-10 sm:mb-12 lg:mb-14">
+                <a href="consult.html" class="btn-primary w-full sm:w-auto px-6 lg:px-7 py-3.5 lg:py-4 text-[14px] font-semibold inline-flex items-center justify-center gap-2">
+                  Book Consultation
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+                </a>
+                <div class="flex items-center justify-center sm:justify-start gap-3 sm:pl-2">
+                  <p class="text-xl sm:text-2xl font-bold text-navy">₦5,000</p>
+                  <p class="micro text-slate">Per session</p>
+                </div>
+              </div>
+
+              <div class="flex flex-wrap items-center gap-x-5 gap-y-3 text-[12px] sm:text-[13px] text-slate">
+                <div class="flex items-center gap-2">
+                  <svg class="w-4 h-4 text-green shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.7 5.3a1 1 0 010 1.4l-8 8a1 1 0 01-1.4 0l-4-4a1 1 0 111.4-1.4L8 12.6l7.3-7.3a1 1 0 011.4 0z" clip-rule="evenodd"/></svg>
+                  <span class="font-medium">Encrypted</span>
+                </div>
+                <div class="flex items-center gap-2">
+                  <svg class="w-4 h-4 text-green shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.7 5.3a1 1 0 010 1.4l-8 8a1 1 0 01-1.4 0l-4-4a1 1 0 111.4-1.4L8 12.6l7.3-7.3a1 1 0 011.4 0z" clip-rule="evenodd"/></svg>
+                  <span class="font-medium">Same-week availability</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="md:col-span-6 order-2">
+              <div class="relative">
+                <div class="aspect-[4/5] sm:aspect-[5/6] md:aspect-[4/5] rounded-xl sm:rounded-2xl overflow-hidden img-zoom shadow-[0_20px_60px_-20px_rgba(26,74,122,.28)] lg:shadow-[0_30px_80px_-30px_rgba(26,74,122,.28)]">
+                  <img src="https://images.unsplash.com/photo-1666214280557-f1b5022eb634?w=1200" class="w-full h-full object-cover" alt="Consultation"/>
+                </div>
+
+                <div class="absolute -top-3 sm:-top-4 right-2 sm:-right-3 lg:-right-4 bg-white rounded-xl sm:rounded-2xl px-3.5 sm:px-4 lg:px-5 py-3 lg:py-4 shadow-[0_16px_40px_-12px_rgba(26,74,122,.24)] border border-line">
+                  <p class="text-xl sm:text-2xl font-extrabold text-navy">4.9<span class="text-slate text-sm font-medium">/5</span></p>
+                  <p class="micro text-slate mt-1" style="font-size:8px;">Client Rating</p>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Controls -->
+      <div class="flex items-center justify-between mt-8 sm:mt-10 pt-6 sm:pt-8 rule">
+        <div class="swiper-pagination !static !w-auto flex items-center"></div>
+        <div class="flex items-center gap-2 sm:gap-3">
+          <div class="swiper-btn prev hero-prev">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+          </div>
+          <div class="swiper-btn hero-next">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= STATS BAND ================= -->
+<section class="bg-tint border-b border-line">
+  <div class="max-w-[1280px] mx-auto px-4 xs:px-5 sm:px-6 lg:px-10 py-10 sm:py-12 lg:py-14">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-y-8 gap-x-4 sm:gap-8 reveal">
+      <div class="text-center">
+        <p class="display-sm gradient-text">10k+</p>
+        <p class="micro text-slate mt-1.5 sm:mt-2">Clients Served</p>
+      </div>
+      <div class="text-center md:border-l border-line">
+        <p class="display-sm gradient-text">40+</p>
+        <p class="micro text-slate mt-1.5 sm:mt-2">Products</p>
+      </div>
+      <div class="text-center md:border-l border-line">
+        <p class="display-sm gradient-text">25</p>
+        <p class="micro text-slate mt-1.5 sm:mt-2">Practitioners</p>
+      </div>
+      <div class="text-center md:border-l border-line">
+        <p class="display-sm gradient-text">24h</p>
+        <p class="micro text-slate mt-1.5 sm:mt-2">Delivery</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= MARQUEE ================= -->
+<section class="bg-white border-b border-line overflow-hidden">
+  <div class="py-5 sm:py-6">
+    <div class="marquee-track">
+      <div class="flex items-center gap-10 sm:gap-14 px-5 sm:px-6">
+        <span class="micro text-slate whitespace-nowrap">NAFDAC Certified</span>
+        <span class="accent-dot"></span>
+        <span class="micro text-slate whitespace-nowrap">Licensed Practitioners</span>
+        <span class="accent-dot"></span>
+        <span class="micro text-slate whitespace-nowrap">Free Delivery</span>
+        <span class="accent-dot"></span>
+        <span class="micro text-slate whitespace-nowrap">Secure Payments</span>
+        <span class="accent-dot"></span>
+        <span class="micro text-slate whitespace-nowrap">Verified Sourcing</span>
+        <span class="accent-dot"></span>
+        <span class="micro text-slate whitespace-nowrap">Satisfaction Guarantee</span>
+        <span class="accent-dot"></span>
+      </div>
+      <div class="flex items-center gap-10 sm:gap-14 px-5 sm:px-6" aria-hidden="true">
+        <span class="micro text-slate whitespace-nowrap">NAFDAC Certified</span>
+        <span class="accent-dot"></span>
+        <span class="micro text-slate whitespace-nowrap">Licensed Practitioners</span>
+        <span class="accent-dot"></span>
+        <span class="micro text-slate whitespace-nowrap">Free Delivery</span>
+        <span class="accent-dot"></span>
+        <span class="micro text-slate whitespace-nowrap">Secure Payments</span>
+        <span class="accent-dot"></span>
+        <span class="micro text-slate whitespace-nowrap">Verified Sourcing</span>
+        <span class="accent-dot"></span>
+        <span class="micro text-slate whitespace-nowrap">Satisfaction Guarantee</span>
+        <span class="accent-dot"></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= COLLECTION ================= -->
+<section class="bg-white border-b border-line">
+  <div class="max-w-[1280px] mx-auto px-4 xs:px-5 sm:px-6 lg:px-10 py-14 sm:py-16 lg:py-24">
+
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-5 sm:gap-6 md:gap-8 mb-10 sm:mb-12 lg:mb-14 reveal">
+      <div>
+        <div class="inline-flex items-center gap-2.5 mb-4 sm:mb-5">
+          <span class="accent-dot"></span>
+          <span class="micro text-green">The Collection</span>
+        </div>
+        <h2 class="display-md text-navy max-w-[560px]">
+          Essentials chosen with intention.
+        </h2>
+      </div>
+      <a href="shop.html" class="text-[14px] font-semibold text-navy hover-underline inline-flex items-center gap-2 self-start md:self-auto">
+        View all products
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+      </a>
+    </div>
+
+    <div class="swiper productSwiper reveal reveal-delay-1">
+      <div class="swiper-wrapper pb-4">
+
+        <!-- Product card template -->
+        <div class="swiper-slide h-auto">
+          <a href="product.html" class="group block bg-white rounded-xl sm:rounded-2xl overflow-hidden border border-line hover:border-navy/20 hover:shadow-[0_24px_60px_-24px_rgba(26,74,122,.2)] transition-all duration-500 h-full">
+            <div class="aspect-[4/5] overflow-hidden bg-mist relative">
+              <img src="https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=800" class="w-full h-full object-cover group-hover:scale-[1.06] transition duration-[1200ms] ease-out" alt="Vitamin D3"/>
+              <span class="absolute top-3 left-3 sm:top-4 sm:left-4 bg-white/95 backdrop-blur-sm text-navy text-[9px] sm:text-[10px] tracking-[0.14em] uppercase font-bold px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full">Immunity</span>
+            </div>
+            <div class="p-4 sm:p-5">
+              <h3 class="text-[14px] sm:text-[16px] font-bold text-navy mb-1 sm:mb-1.5 group-hover:text-blue transition">Vitamin D3 Complex</h3>
+              <p class="text-slate text-[12px] sm:text-[13px] mb-3 sm:mb-4">60 softgels</p>
+              <div class="flex items-center justify-between pt-3 sm:pt-4 rule">
+                <span class="text-[15px] sm:text-[17px] font-extrabold text-navy">₦12,500</span>
+                <span class="w-8 h-8 sm:w-9 sm:h-9 rounded-full gradient-brand text-white flex items-center justify-center sm:opacity-0 sm:group-hover:opacity-100 transition-all duration-500">
+                  <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
+                </span>
+              </div>
+            </div>
+          </a>
+        </div>
+
+        <div class="swiper-slide h-auto">
+          <a href="product.html" class="group block bg-white rounded-xl sm:rounded-2xl overflow-hidden border border-line hover:border-navy/20 hover:shadow-[0_24px_60px_-24px_rgba(26,74,122,.2)] transition-all duration-500 h-full">
+            <div class="aspect-[4/5] overflow-hidden bg-mist relative">
+              <img src="https://images.unsplash.com/photo-1550572017-edd951aa8f72?w=800" class="w-full h-full object-cover group-hover:scale-[1.06] transition duration-[1200ms] ease-out" alt="Omega-3"/>
+              <span class="absolute top-3 left-3 sm:top-4 sm:left-4 bg-white/95 backdrop-blur-sm text-navy text-[9px] sm:text-[10px] tracking-[0.14em] uppercase font-bold px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full">Heart</span>
+            </div>
+            <div class="p-4 sm:p-5">
+              <h3 class="text-[14px] sm:text-[16px] font-bold text-navy mb-1 sm:mb-1.5 group-hover:text-blue transition">Omega-3 Fish Oil</h3>
+              <p class="text-slate text-[12px] sm:text-[13px] mb-3 sm:mb-4">90 capsules</p>
+              <div class="flex items-center justify-between pt-3 sm:pt-4 rule">
+                <span class="text-[15px] sm:text-[17px] font-extrabold text-navy">₦8,900</span>
+                <span class="w-8 h-8 sm:w-9 sm:h-9 rounded-full gradient-brand text-white flex items-center justify-center sm:opacity-0 sm:group-hover:opacity-100 transition-all duration-500">
+                  <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
+                </span>
+              </div>
+            </div>
+          </a>
+        </div>
+
+        <div class="swiper-slide h-auto">
+          <a href="product.html" class="group block bg-white rounded-xl sm:rounded-2xl overflow-hidden border border-line hover:border-navy/20 hover:shadow-[0_24px_60px_-24px_rgba(26,74,122,.2)] transition-all duration-500 h-full">
+            <div class="aspect-[4/5] overflow-hidden bg-mist relative">
+              <img src="https://images.unsplash.com/photo-1607619056574-7b8d3ee536b2?w=800" class="w-full h-full object-cover group-hover:scale-[1.06] transition duration-[1200ms] ease-out" alt="Herbal Detox Tea"/>
+              <span class="absolute top-3 left-3 sm:top-4 sm:left-4 bg-white/95 backdrop-blur-sm text-navy text-[9px] sm:text-[10px] tracking-[0.14em] uppercase font-bold px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full">Digestion</span>
+            </div>
+            <div class="p-4 sm:p-5">
+              <h3 class="text-[14px] sm:text-[16px] font-bold text-navy mb-1 sm:mb-1.5 group-hover:text-blue transition">Herbal Detox Tea</h3>
+              <p class="text-slate text-[12px] sm:text-[13px] mb-3 sm:mb-4">30 tea bags</p>
+              <div class="flex items-center justify-between pt-3 sm:pt-4 rule">
+                <span class="text-[15px] sm:text-[17px] font-extrabold text-navy">₦5,500</span>
+                <span class="w-8 h-8 sm:w-9 sm:h-9 rounded-full gradient-brand text-white flex items-center justify-center sm:opacity-0 sm:group-hover:opacity-100 transition-all duration-500">
+                  <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
+                </span>
+              </div>
+            </div>
+          </a>
+        </div>
+
+        <div class="swiper-slide h-auto">
+          <a href="product.html" class="group block bg-white rounded-xl sm:rounded-2xl overflow-hidden border border-line hover:border-navy/20 hover:shadow-[0_24px_60px_-24px_rgba(26,74,122,.2)] transition-all duration-500 h-full">
+            <div class="aspect-[4/5] overflow-hidden bg-mist relative">
+              <img src="https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=800" class="w-full h-full object-cover group-hover:scale-[1.06] transition duration-[1200ms] ease-out" alt="Multivitamin Gummies"/>
+              <span class="absolute top-3 left-3 sm:top-4 sm:left-4 bg-white/95 backdrop-blur-sm text-navy text-[9px] sm:text-[10px] tracking-[0.14em] uppercase font-bold px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full">Daily</span>
+            </div>
+            <div class="p-4 sm:p-5">
+              <h3 class="text-[14px] sm:text-[16px] font-bold text-navy mb-1 sm:mb-1.5 group-hover:text-blue transition">Multivitamin Gummies</h3>
+              <p class="text-slate text-[12px] sm:text-[13px] mb-3 sm:mb-4">90 gummies</p>
+              <div class="flex items-center justify-between pt-3 sm:pt-4 rule">
+                <span class="text-[15px] sm:text-[17px] font-extrabold text-navy">₦7,200</span>
+                <span class="w-8 h-8 sm:w-9 sm:h-9 rounded-full gradient-brand text-white flex items-center justify-center sm:opacity-0 sm:group-hover:opacity-100 transition-all duration-500">
+                  <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
+                </span>
+              </div>
+            </div>
+          </a>
+        </div>
+
+        <div class="swiper-slide h-auto">
+          <a href="product.html" class="group block bg-white rounded-xl sm:rounded-2xl overflow-hidden border border-line hover:border-navy/20 hover:shadow-[0_24px_60px_-24px_rgba(26,74,122,.2)] transition-all duration-500 h-full">
+            <div class="aspect-[4/5] overflow-hidden bg-mist relative">
+              <img src="https://images.unsplash.com/photo-1607619056574-7b8d3ee536b2?w=800" class="w-full h-full object-cover group-hover:scale-[1.06] transition duration-[1200ms] ease-out" alt="Immune Boost"/>
+              <span class="absolute top-3 left-3 sm:top-4 sm:left-4 bg-white/95 backdrop-blur-sm text-navy text-[9px] sm:text-[10px] tracking-[0.14em] uppercase font-bold px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full">Immunity</span>
+            </div>
+            <div class="p-4 sm:p-5">
+              <h3 class="text-[14px] sm:text-[16px] font-bold text-navy mb-1 sm:mb-1.5 group-hover:text-blue transition">Immune Boost Capsules</h3>
+              <p class="text-slate text-[12px] sm:text-[13px] mb-3 sm:mb-4">60 capsules</p>
+              <div class="flex items-center justify-between pt-3 sm:pt-4 rule">
+                <span class="text-[15px] sm:text-[17px] font-extrabold text-navy">₦10,000</span>
+                <span class="w-8 h-8 sm:w-9 sm:h-9 rounded-full gradient-brand text-white flex items-center justify-center sm:opacity-0 sm:group-hover:opacity-100 transition-all duration-500">
+                  <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
+                </span>
+              </div>
+            </div>
+          </a>
+        </div>
+
+        <div class="swiper-slide h-auto">
+          <a href="product.html" class="group block bg-white rounded-xl sm:rounded-2xl overflow-hidden border border-line hover:border-navy/20 hover:shadow-[0_24px_60px_-24px_rgba(26,74,122,.2)] transition-all duration-500 h-full">
+            <div class="aspect-[4/5] overflow-hidden bg-mist relative">
+              <img src="https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=800" class="w-full h-full object-cover group-hover:scale-[1.06] transition duration-[1200ms] ease-out" alt="Collagen Peptides"/>
+              <span class="absolute top-3 left-3 sm:top-4 sm:left-4 bg-white/95 backdrop-blur-sm text-navy text-[9px] sm:text-[10px] tracking-[0.14em] uppercase font-bold px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full">Wellness</span>
+            </div>
+            <div class="p-4 sm:p-5">
+              <h3 class="text-[14px] sm:text-[16px] font-bold text-navy mb-1 sm:mb-1.5 group-hover:text-blue transition">Collagen Peptides</h3>
+              <p class="text-slate text-[12px] sm:text-[13px] mb-3 sm:mb-4">300g powder</p>
+              <div class="flex items-center justify-between pt-3 sm:pt-4 rule">
+                <span class="text-[15px] sm:text-[17px] font-extrabold text-navy">₦15,900</span>
+                <span class="w-8 h-8 sm:w-9 sm:h-9 rounded-full gradient-brand text-white flex items-center justify-center sm:opacity-0 sm:group-hover:opacity-100 transition-all duration-500">
+                  <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
+                </span>
+              </div>
+            </div>
+          </a>
+        </div>
+
+      </div>
+
+      <!-- Nav arrows — hidden on mobile where swipe is natural -->
+      <div class="mobile-hide-nav flex items-center justify-end gap-3 mt-8">
+        <div class="swiper-btn prev product-prev">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+        </div>
+        <div class="swiper-btn product-next">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ================= CONSULTATION CTA ================= -->
+<section class="gradient-brand relative overflow-hidden">
+  <div class="absolute inset-0 opacity-[0.14]">
+    <svg class="w-full h-full" viewBox="0 0 1200 400" preserveAspectRatio="none">
+      <circle cx="1000" cy="100" r="240" fill="white"/>
+      <circle cx="150" cy="350" r="180" fill="white"/>
+    </svg>
+  </div>
+
+  <div class="relative max-w-[1280px] mx-auto px-4 xs:px-5 sm:px-6 lg:px-10 py-14 sm:py-16 lg:py-24">
+    <div class="grid md:grid-cols-12 gap-10 md:gap-12 lg:gap-16 items-center">
+
+      <div class="md:col-span-7 reveal">
+        <div class="inline-flex items-center gap-2.5 bg-white/15 backdrop-blur-sm border border-white/25 px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-full mb-5 sm:mb-6 lg:mb-7">
+          <span class="w-1.5 h-1.5 rounded-full bg-lime"></span>
+          <span class="micro text-white">Private Consultation</span>
+        </div>
+
+        <h2 class="display-md text-white mb-5 sm:mb-6 max-w-[560px]">
+          Speak with someone who understands.
+        </h2>
+
+        <p class="text-white/85 text-[15px] sm:text-[16px] leading-[1.75] mb-8 sm:mb-9 lg:mb-10 max-w-[520px]">
+          Book a private thirty-minute session with a licensed practitioner. Personalised guidance, from the comfort of your home.
+        </p>
+
+        <div class="grid grid-cols-3 gap-3 sm:gap-6 lg:gap-8 mb-8 sm:mb-9 lg:mb-10">
+          <div class="flex items-center gap-2 sm:gap-3">
+            <div class="w-9 h-9 sm:w-11 sm:h-11 rounded-lg sm:rounded-xl bg-white/15 border border-white/25 flex items-center justify-center shrink-0">
+              <svg class="w-4 h-4 sm:w-5 sm:h-5 text-white" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            </div>
+            <div class="min-w-0">
+              <p class="text-white font-bold text-[13px] sm:text-[15px] truncate">30 Min</p>
+              <p class="text-white/70 text-[11px] sm:text-[12px] truncate">Per session</p>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-2 sm:gap-3">
+            <div class="w-9 h-9 sm:w-11 sm:h-11 rounded-lg sm:rounded-xl bg-white/15 border border-white/25 flex items-center justify-center shrink-0">
+              <svg class="w-4 h-4 sm:w-5 sm:h-5 text-white" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            </div>
+            <div class="min-w-0">
+              <p class="text-white font-bold text-[13px] sm:text-[15px] truncate">Verified</p>
+              <p class="text-white/70 text-[11px] sm:text-[12px] truncate">Licensed MDs</p>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-2 sm:gap-3">
+            <div class="w-9 h-9 sm:w-11 sm:h-11 rounded-lg sm:rounded-xl bg-white/15 border border-white/25 flex items-center justify-center shrink-0">
+              <svg class="w-4 h-4 sm:w-5 sm:h-5 text-white" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z"/></svg>
+            </div>
+            <div class="min-w-0">
+              <p class="text-white font-bold text-[13px] sm:text-[15px] truncate">Video</p>
+              <p class="text-white/70 text-[11px] sm:text-[12px] truncate">Encrypted</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-5">
+          <a href="consult.html" class="btn-light w-full sm:w-auto px-6 lg:px-7 py-3.5 lg:py-4 text-[14px] font-bold inline-flex items-center justify-center gap-2">
+            Book a Consultation
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+          </a>
+          <p class="text-white/80 text-[14px] text-center sm:text-left"><span class="font-bold text-white">₦5,000</span> flat fee</p>
+        </div>
+      </div>
+
+      <div class="md:col-span-5 reveal reveal-delay-1 order-first md:order-last">
+        <div class="aspect-[4/3] sm:aspect-[16/10] md:aspect-[4/5] rounded-xl sm:rounded-2xl overflow-hidden border-4 border-white/25 shadow-2xl img-zoom">
+          <img src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=800" class="w-full h-full object-cover" alt="Consultation"/>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ================= PRACTITIONERS ================= -->
+<section class="bg-white border-b border-line">
+  <div class="max-w-[1280px] mx-auto px-4 xs:px-5 sm:px-6 lg:px-10 py-14 sm:py-16 lg:py-24">
+
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-5 sm:gap-6 md:gap-8 mb-10 sm:mb-12 lg:mb-14 reveal">
+      <div>
+        <div class="inline-flex items-center gap-2.5 mb-4 sm:mb-5">
+          <span class="accent-dot"></span>
+          <span class="micro text-green">Our Practitioners</span>
+        </div>
+        <h2 class="display-md text-navy max-w-[560px]">
+          A team you can trust.
+        </h2>
+      </div>
+      <div class="mobile-hide-nav flex items-center gap-3 self-start md:self-auto">
+        <div class="swiper-btn prev prac-prev">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+        </div>
+        <div class="swiper-btn prac-next">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+        </div>
+      </div>
+    </div>
+
+    <div class="swiper practSwiper reveal reveal-delay-1">
+      <div class="swiper-wrapper pb-4">
+
+        <div class="swiper-slide h-auto">
+          <div class="bg-white rounded-xl sm:rounded-2xl overflow-hidden border border-line h-full hover:border-navy/20 hover:shadow-[0_24px_60px_-24px_rgba(26,74,122,.2)] transition-all duration-500 flex flex-col">
+            <div class="aspect-[4/3] overflow-hidden bg-mist relative">
+              <img src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=800" class="w-full h-full object-cover" alt="Dr. Amina Okafor"/>
+              <span class="absolute top-3 left-3 bg-white/95 backdrop-blur-sm text-green text-[9px] sm:text-[10px] tracking-[0.12em] uppercase font-bold px-2.5 py-1 sm:py-1.5 rounded-full flex items-center gap-1.5">
+                <span class="w-1.5 h-1.5 rounded-full bg-green"></span>
+                Available
+              </span>
+            </div>
+            <div class="p-5 sm:p-6 flex flex-col flex-1">
+              <p class="micro text-blue mb-2">General Practitioner</p>
+              <h3 class="text-[17px] sm:text-[19px] font-bold text-navy mb-2.5 sm:mb-3">Dr. Amina Okafor</h3>
+              <p class="text-slate text-[13px] sm:text-[14px] leading-[1.7] mb-4 sm:mb-5 flex-1">
+                Preventive care and lifestyle medicine, with eight years in clinical practice.
+              </p>
+              <div class="flex items-center justify-between pt-4 sm:pt-5 rule">
+                <p class="text-[15px] sm:text-[16px] font-bold text-navy">₦5,000</p>
+                <a href="booking.html" class="btn-outline px-3.5 sm:px-4 py-2 text-[12px] font-semibold">Book</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="swiper-slide h-auto">
+          <div class="bg-white rounded-xl sm:rounded-2xl overflow-hidden border border-line h-full hover:border-navy/20 hover:shadow-[0_24px_60px_-24px_rgba(26,74,122,.2)] transition-all duration-500 flex flex-col">
+            <div class="aspect-[4/3] overflow-hidden bg-mist relative">
+              <img src="https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=800" class="w-full h-full object-cover" alt="Dr. James Bello"/>
+              <span class="absolute top-3 left-3 bg-white/95 backdrop-blur-sm text-green text-[9px] sm:text-[10px] tracking-[0.12em] uppercase font-bold px-2.5 py-1 sm:py-1.5 rounded-full flex items-center gap-1.5">
+                <span class="w-1.5 h-1.5 rounded-full bg-green"></span>
+                Available
+              </span>
+            </div>
+            <div class="p-5 sm:p-6 flex flex-col flex-1">
+              <p class="micro text-blue mb-2">Clinical Nutritionist</p>
+              <h3 class="text-[17px] sm:text-[19px] font-bold text-navy mb-2.5 sm:mb-3">Dr. James Bello</h3>
+              <p class="text-slate text-[13px] sm:text-[14px] leading-[1.7] mb-4 sm:mb-5 flex-1">
+                Helping clients build sustainable, evidence-based eating habits.
+              </p>
+              <div class="flex items-center justify-between pt-4 sm:pt-5 rule">
+                <p class="text-[15px] sm:text-[16px] font-bold text-navy">₦4,500</p>
+                <a href="booking.html" class="btn-outline px-3.5 sm:px-4 py-2 text-[12px] font-semibold">Book</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="swiper-slide h-auto">
+          <div class="bg-white rounded-xl sm:rounded-2xl overflow-hidden border border-line h-full hover:border-navy/20 hover:shadow-[0_24px_60px_-24px_rgba(26,74,122,.2)] transition-all duration-500 flex flex-col">
+            <div class="aspect-[4/3] overflow-hidden bg-mist relative">
+              <img src="https://images.unsplash.com/photo-1594824476967-48c8b964273f?w=800" class="w-full h-full object-cover" alt="Dr. Sarah Chen"/>
+              <span class="absolute top-3 left-3 bg-white/95 backdrop-blur-sm text-green text-[9px] sm:text-[10px] tracking-[0.12em] uppercase font-bold px-2.5 py-1 sm:py-1.5 rounded-full flex items-center gap-1.5">
+                <span class="w-1.5 h-1.5 rounded-full bg-green"></span>
+                Available
+              </span>
+            </div>
+            <div class="p-5 sm:p-6 flex flex-col flex-1">
+              <p class="micro text-blue mb-2">Wellness Coach</p>
+              <h3 class="text-[17px] sm:text-[19px] font-bold text-navy mb-2.5 sm:mb-3">Dr. Sarah Chen</h3>
+              <p class="text-slate text-[13px] sm:text-[14px] leading-[1.7] mb-4 sm:mb-5 flex-1">
+                Holistic approaches to stress, sleep, and mental wellbeing.
+              </p>
+              <div class="flex items-center justify-between pt-4 sm:pt-5 rule">
+                <p class="text-[15px] sm:text-[16px] font-bold text-navy">₦6,000</p>
+                <a href="booking.html" class="btn-outline px-3.5 sm:px-4 py-2 text-[12px] font-semibold">Book</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="swiper-slide h-auto">
+          <div class="bg-white rounded-xl sm:rounded-2xl overflow-hidden border border-line h-full hover:border-navy/20 hover:shadow-[0_24px_60px_-24px_rgba(26,74,122,.2)] transition-all duration-500 flex flex-col">
+            <div class="aspect-[4/3] overflow-hidden bg-mist relative">
+              <img src="https://images.unsplash.com/photo-1582750433449-648ed127bb54?w=800" class="w-full h-full object-cover" alt="Dr. Tunde Ajayi"/>
+              <span class="absolute top-3 left-3 bg-white/95 backdrop-blur-sm text-green text-[9px] sm:text-[10px] tracking-[0.12em] uppercase font-bold px-2.5 py-1 sm:py-1.5 rounded-full flex items-center gap-1.5">
+                <span class="w-1.5 h-1.5 rounded-full bg-green"></span>
+                Available
+              </span>
+            </div>
+            <div class="p-5 sm:p-6 flex flex-col flex-1">
+              <p class="micro text-blue mb-2">Physiotherapist</p>
+              <h3 class="text-[17px] sm:text-[19px] font-bold text-navy mb-2.5 sm:mb-3">Dr. Tunde Ajayi</h3>
+              <p class="text-slate text-[13px] sm:text-[14px] leading-[1.7] mb-4 sm:mb-5 flex-1">
+                Movement, mobility, and recovery for active lifestyles.
+              </p>
+              <div class="flex items-center justify-between pt-4 sm:pt-5 rule">
+                <p class="text-[15px] sm:text-[16px] font-bold text-navy">₦5,500</p>
+                <a href="booking.html" class="btn-outline px-3.5 sm:px-4 py-2 text-[12px] font-semibold">Book</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ================= TESTIMONIALS ================= -->
+<section class="bg-tint border-b border-line">
+  <div class="max-w-[1280px] mx-auto px-4 xs:px-5 sm:px-6 lg:px-10 py-14 sm:py-16 lg:py-24">
+
+    <div class="text-center mb-10 sm:mb-12 reveal">
+      <div class="inline-flex items-center gap-2.5 mb-4 sm:mb-5">
+        <span class="accent-dot"></span>
+        <span class="micro text-green">Testimonials</span>
+        <span class="accent-dot"></span>
+      </div>
+      <h2 class="display-md text-navy max-w-[600px] mx-auto">
+        Stories from people we've cared for.
+      </h2>
+    </div>
+
+    <div class="swiper testimonialSwiper max-w-[820px] mx-auto reveal reveal-delay-1">
+      <div class="swiper-wrapper">
+
+        <div class="swiper-slide">
+          <div class="text-center px-2 sm:px-4">
+            <div class="flex justify-center mb-5 sm:mb-6">
+              <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl gradient-brand flex items-center justify-center text-white">
+                <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M9.983 3v7.391c0 5.704-3.731 9.57-8.983 10.609l-.995-2.151c2.432-.917 3.995-3.638 3.995-5.849h-4v-10h9.983zm14.017 0v7.391c0 5.704-3.748 9.571-9 10.609l-.996-2.151c2.433-.917 3.996-3.638 3.996-5.849h-3.983v-10h9.983z"/></svg>
+              </div>
+            </div>
+            <p class="text-[18px] sm:text-[22px] lg:text-[26px] leading-[1.5] text-navy font-medium mb-6 sm:mb-8">
+              "The consultation felt unhurried and genuinely personal. I finally understood my own health."
+            </p>
+            <p class="micro text-slate">Chidinma A. — Lagos</p>
+          </div>
+        </div>
+
+        <div class="swiper-slide">
+          <div class="text-center px-2 sm:px-4">
+            <div class="flex justify-center mb-5 sm:mb-6">
+              <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl gradient-brand flex items-center justify-center text-white">
+                <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M9.983 3v7.391c0 5.704-3.731 9.57-8.983 10.609l-.995-2.151c2.432-.917 3.995-3.638 3.995-5.849h-4v-10h9.983zm14.017 0v7.391c0 5.704-3.748 9.571-9 10.609l-.996-2.151c2.433-.917 3.996-3.638 3.996-5.849h-3.983v-10h9.983z"/></svg>
+              </div>
+            </div>
+            <p class="text-[18px] sm:text-[22px] lg:text-[26px] leading-[1.5] text-navy font-medium mb-6 sm:mb-8">
+              "I've ordered supplements for years. This is the first time it felt like someone was actually paying attention."
+            </p>
+            <p class="micro text-slate">Emeka N. — Abuja</p>
+          </div>
+        </div>
+
+        <div class="swiper-slide">
+          <div class="text-center px-2 sm:px-4">
+            <div class="flex justify-center mb-5 sm:mb-6">
+              <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl gradient-brand flex items-center justify-center text-white">
+                <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M9.983 3v7.391c0 5.704-3.731 9.57-8.983 10.609l-.995-2.151c2.432-.917 3.995-3.638 3.995-5.849h-4v-10h9.983zm14.017 0v7.391c0 5.704-3.748 9.571-9 10.609l-.996-2.151c2.433-.917 3.996-3.638 3.996-5.849h-3.983v-10h9.983z"/></svg>
+              </div>
+            </div>
+            <p class="text-[18px] sm:text-[22px] lg:text-[26px] leading-[1.5] text-navy font-medium mb-6 sm:mb-8">
+              "Booking took a minute. The video call was private, punctual, and refreshingly human."
+            </p>
+            <p class="micro text-slate">Fatima B. — Port Harcourt</p>
+          </div>
+        </div>
+
+      </div>
+      <div class="swiper-pagination !static !w-auto flex items-center justify-center mt-6 sm:mt-8"></div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ================= NEWSLETTER ================= -->
+<section class="bg-white">
+  <div class="max-w-[1280px] mx-auto px-4 xs:px-5 sm:px-6 lg:px-10 py-14 sm:py-16 lg:py-24">
+    <div class="grid md:grid-cols-12 gap-8 md:gap-12 items-center">
+      <div class="md:col-span-5 reveal">
+        <div class="inline-flex items-center gap-2.5 mb-4 sm:mb-5">
+          <span class="accent-dot"></span>
+          <span class="micro text-green">The Journal</span>
+        </div>
+        <h2 class="display-md text-navy">
+          Notes on living well.
+        </h2>
+      </div>
+      <div class="md:col-span-6 md:col-start-7 reveal reveal-delay-1">
+        <p class="text-slate text-[14px] sm:text-[15px] leading-[1.8] mb-5 sm:mb-6">
+          Monthly letters on nutrition, movement, and mindful health. Never more than twice a month — and always worth reading.
+        </p>
+        <form class="flex flex-col xs:flex-row items-stretch xs:items-center bg-mist border border-line focus-within:border-blue rounded-xl p-1.5 xs:pl-5 transition gap-2 xs:gap-0">
+          <input type="email" placeholder="Your email address"
+                 class="flex-1 bg-transparent py-3 px-3 xs:px-0 text-[14px] outline-none placeholder:text-slate/60 text-navy min-w-0"/>
+          <button type="submit" class="btn-primary text-[13px] font-semibold px-6 py-3 xs:py-2.5 shrink-0">
+            Subscribe
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= FOOTER ================= -->
+<footer class="bg-deep text-white">
+  <div class="max-w-[1280px] mx-auto px-4 xs:px-5 sm:px-6 lg:px-10 py-14 sm:py-16 lg:py-20">
+
+    <div class="grid grid-cols-2 md:grid-cols-12 gap-y-10 gap-x-6 md:gap-12 pb-12 sm:pb-14 border-b border-white/10">
+
+      <div class="col-span-2 md:col-span-5">
+        <div class="flex items-center gap-3 mb-5 sm:mb-6">
+          <svg viewBox="0 0 100 100" class="w-9 h-9 sm:w-10 sm:h-10">
+            <defs>
+              <linearGradient id="hb-footer" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#2b8bc9"/>
+                <stop offset="100%" stop-color="#3aa76d"/>
+              </linearGradient>
+            </defs>
+            <path d="M38 8 h24 a6 6 0 0 1 6 6 v18 h18 a6 6 0 0 1 6 6 v24 a6 6 0 0 1 -6 6 H68 v18 a6 6 0 0 1 -6 6 H38 a6 6 0 0 1 -6 -6 V68 H14 a6 6 0 0 1 -6 -6 V38 a6 6 0 0 1 6 -6 h18 V14 a6 6 0 0 1 6 -6 z" fill="url(#hb-footer)"/>
+            <circle cx="50" cy="34" r="6" fill="#0d2f4d"/>
+            <path d="M32 44 Q40 40 46 46 M68 44 Q60 40 54 46" stroke="#0d2f4d" stroke-width="4" stroke-linecap="round" fill="none"/>
+            <path d="M44 60 Q58 52 66 62 Q64 74 50 74 Q44 68 44 60 z" fill="#7fc341"/>
+          </svg>
+          <div>
+            <div class="text-[20px] sm:text-[22px] font-extrabold">
+              <span class="text-white">Health</span><span class="text-lime">Buddy</span>
+            </div>
+            <div class="micro text-white/40 mt-1.5" style="font-size:8.5px;">Better Health · Happier You</div>
+          </div>
+        </div>
+        <p class="text-[13px] sm:text-[14px] leading-[1.8] text-white/60 max-w-[380px]">
+          Considered health, expertly delivered. Lagos, Nigeria — serving clients nationwide.
+        </p>
+      </div>
+
+      <div class="md:col-span-2 md:col-start-7">
+        <p class="micro text-white/40 mb-4 sm:mb-5">Shop</p>
+        <ul class="space-y-3 sm:space-y-3.5 text-[13px] sm:text-[14px]">
+          <li><a href="shop.html" class="text-white/70 hover:text-white transition">All Products</a></li>
+          <li><a href="#" class="text-white/70 hover:text-white transition">Supplements</a></li>
+          <li><a href="#" class="text-white/70 hover:text-white transition">Wellness</a></li>
+        </ul>
+      </div>
+
+      <div class="md:col-span-2">
+        <p class="micro text-white/40 mb-4 sm:mb-5">Care</p>
+        <ul class="space-y-3 sm:space-y-3.5 text-[13px] sm:text-[14px]">
+          <li><a href="consult.html" class="text-white/70 hover:text-white transition">Consultations</a></li>
+          <li><a href="#" class="text-white/70 hover:text-white transition">Practitioners</a></li>
+          <li><a href="#" class="text-white/70 hover:text-white transition">Journal</a></li>
+        </ul>
+      </div>
+
+      <div class="col-span-2 md:col-span-2">
+        <p class="micro text-white/40 mb-4 sm:mb-5">Contact</p>
+        <ul class="space-y-3 sm:space-y-3.5 text-[13px] sm:text-[14px]">
+          <li><a href="mailto:hello@healthbuddy.ng" class="text-white/70 hover:text-white transition break-all">hello@healthbuddy.ng</a></li>
+          <li><a href="#" class="text-white/70 hover:text-white transition">+234 · Lagos</a></li>
+          <li><a href="#" class="text-white/70 hover:text-white transition">Instagram</a></li>
+        </ul>
+      </div>
+
+    </div>
+
+    <div class="pt-6 sm:pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 sm:gap-6 text-center sm:text-left">
+      <p class="micro text-white/40">© 2026 HealthBuddy — All rights reserved</p>
+      <div class="flex flex-wrap justify-center gap-x-6 gap-y-2 sm:gap-8">
+        <a href="#" class="micro text-white/40 hover:text-white transition">Privacy</a>
+        <a href="#" class="micro text-white/40 hover:text-white transition">Terms</a>
+        <a href="#" class="micro text-white/40 hover:text-white transition">Disclaimer</a>
+      </div>
+    </div>
+
+  </div>
+</footer>
+
+<!-- ================= SCRIPTS ================= -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+<script>
+  /* ============ MOBILE MENU ============ */
+  const menuBtn     = document.getElementById('menuBtn');
+  const closeBtn    = document.getElementById('closeBtn');
+  const mobileMenu  = document.getElementById('mobileMenu');
+  const backdrop    = document.getElementById('menuBackdrop');
+
+  function openMenu() {
+    mobileMenu.classList.add('is-open');
+    backdrop.classList.add('is-open');
+    menuBtn.classList.add('is-open');
+    document.body.classList.add('menu-open');
+  }
+  function closeMenu() {
+    mobileMenu.classList.remove('is-open');
+    backdrop.classList.remove('is-open');
+    menuBtn.classList.remove('is-open');
+    document.body.classList.remove('menu-open');
+  }
+
+  menuBtn.addEventListener('click', () => {
+    mobileMenu.classList.contains('is-open') ? closeMenu() : openMenu();
+  });
+  closeBtn.addEventListener('click', closeMenu);
+  backdrop.addEventListener('click', closeMenu);
+  mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMenu));
+
+  /* ============ SWIPER CONFIGS ============ */
+
+  // HERO
+  new Swiper('.heroSwiper', {
+    loop: true,
+    speed: 1100,
+    autoplay: { delay: 7000, disableOnInteraction: false },
+    pagination: { el: '.heroSwiper .swiper-pagination', clickable: true },
+    navigation: { nextEl: '.hero-next', prevEl: '.hero-prev' },
+    keyboard: { enabled: true },
+    on: {
+      init(sw) {
+        sw.slides.forEach(s => s.style.transitionTimingFunction = 'cubic-bezier(.22,1,.36,1)');
+      }
+    }
+  });
+
+  // PRODUCTS
+  new Swiper('.productSwiper', {
+    slidesPerView: 1.25,
+    spaceBetween: 14,
+    speed: 800,
+    grabCursor: true,
+    navigation: { nextEl: '.product-next', prevEl: '.product-prev' },
+    breakpoints: {
+      480:  { slidesPerView: 1.6, spaceBetween: 16 },
+      640:  { slidesPerView: 2,   spaceBetween: 20 },
+      1024: { slidesPerView: 3,   spaceBetween: 24 },
+      1280: { slidesPerView: 4,   spaceBetween: 24 }
+    }
+  });
+
+  // PRACTITIONERS
+  new Swiper('.practSwiper', {
+    slidesPerView: 1.15,
+    spaceBetween: 14,
+    speed: 800,
+    grabCursor: true,
+    navigation: { nextEl: '.prac-next', prevEl: '.prac-prev' },
+    breakpoints: {
+      480:  { slidesPerView: 1.4, spaceBetween: 16 },
+      640:  { slidesPerView: 2,   spaceBetween: 20 },
+      1024: { slidesPerView: 3,   spaceBetween: 24 }
+    }
+  });
+
+  // TESTIMONIALS
+  new Swiper('.testimonialSwiper', {
+    loop: true,
+    speed: 900,
+    effect: 'fade',
+    fadeEffect: { crossFade: true },
+    autoplay: { delay: 6000, disableOnInteraction: false },
+    pagination: { el: '.testimonialSwiper .swiper-pagination', clickable: true }
+  });
+
+  /* ============ SCROLL REVEAL ============ */
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-in');
+        io.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  /* ============ NAV SCROLL ============ */
+  const nav = document.getElementById('nav');
+  let lastY = 0;
+  window.addEventListener('scroll', () => {
+    const y = window.scrollY;
+    if (y > 30) nav.classList.add('nav-scrolled');
+    else nav.classList.remove('nav-scrolled');
+    lastY = y;
+  }, { passive: true });
+
+  /* ============ RESIZE: close menu if resized to desktop ============ */
+  window.addEventListener('resize', () => {
+    if (window.innerWidth >= 768 && mobileMenu.classList.contains('is-open')) {
+      closeMenu();
+    }
+  });
+</script>
+
+</body>
+</html>

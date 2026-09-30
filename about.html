@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+<meta name="theme-color" content="#1a4a7a"/>
+<title>About — HealthBuddy</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        fontFamily: { sans: ['Inter', 'sans-serif'] },
+        colors: {
+          navy: '#1a4a7a', blue: '#2b8bc9', green: '#3aa76d', lime: '#7fc341',
+          slate: '#5b6b75', mist: '#f7f9fb', cloud: '#ffffff', line: '#e4eaf0',
+          tint: '#eef5f9', deep: '#0d2f4d',
+        },
+        letterSpacing: { micro: '0.16em' },
+        screens: { 'xs': '480px' }
+      }
+    }
+  }
+</script>
+
+<style>
+  html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
+  body { font-feature-settings: "ss01","cv11","cv02"; }
+
+  .display-lg {
+    font-weight: 700; letter-spacing: -0.035em; line-height: 1.05;
+    font-size: clamp(2.25rem, 6vw, 4rem);
+  }
+  .display-md {
+    font-weight: 700; letter-spacing: -0.03em; line-height: 1.1;
+    font-size: clamp(1.75rem, 4.5vw, 2.75rem);
+  }
+  .display-sm {
+    font-weight: 700; letter-spacing: -0.025em; line-height: 1.15;
+    font-size: clamp(1.35rem, 3vw, 1.75rem);
+  }
+
+  .micro { font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; font-weight: 600; }
+  @media (max-width: 480px) { .micro { font-size: 10px; letter-spacing: 0.14em; } }
+
+  .gradient-text {
+    background: linear-gradient(120deg, #2b8bc9 0%, #3aa76d 100%);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .gradient-brand { background: linear-gradient(120deg, #2b8bc9 0%, #3aa76d 100%); }
+  .rule { border-top: 1px solid #e4eaf0; }
+
+  /* Buttons */
+  .btn-primary, .btn-outline, .btn-light {
+    position: relative; overflow: hidden; z-index: 1; border-radius: 6px; min-height: 44px;
+    transition: color .5s cubic-bezier(.22,1,.36,1);
+  }
+  .btn-primary { background: #1a4a7a; color: #fff; }
+  .btn-primary::before {
+    content:''; position: absolute; inset: 0;
+    background: linear-gradient(120deg, #2b8bc9 0%, #3aa76d 100%);
+    transform: translateY(101%); transition: transform .6s cubic-bezier(.22,1,.36,1); z-index: -1;
+  }
+  .btn-primary:hover::before { transform: translateY(0); }
+
+  .btn-outline { border: 1.5px solid #1a4a7a; color: #1a4a7a; background: transparent; }
+  .btn-outline::before {
+    content:''; position: absolute; inset: 0; background: #1a4a7a;
+    transform: translateY(101%); transition: transform .6s cubic-bezier(.22,1,.36,1); z-index: -1;
+  }
+  .btn-outline:hover { color: #fff; }
+  .btn-outline:hover::before { transform: translateY(0); }
+
+  .btn-light { background: #fff; color: #1a4a7a; }
+  .btn-light::before {
+    content:''; position: absolute; inset: 0; background: #f7f9fb;
+    transform: translateY(101%); transition: transform .6s cubic-bezier(.22,1,.36,1); z-index: -1;
+  }
+  .btn-light:hover::before { transform: translateY(0); }
+
+  .hover-underline {
+    background-image: linear-gradient(currentColor, currentColor);
+    background-size: 0% 1px; background-repeat: no-repeat; background-position: 0 100%;
+    transition: background-size .5s cubic-bezier(.22,1,.36,1); padding-bottom: 2px;
+  }
+  .hover-underline:hover { background-size: 100% 1px; }
+
+  .img-zoom img { transition: transform 1.6s cubic-bezier(.22,1,.36,1); }
+  @media (hover: hover) { .img-zoom:hover img { transform: scale(1.05); } }
+
+  .nav-scrolled {
+    background: rgba(255,255,255,.94);
+    backdrop-filter: blur(14px);
+    border-bottom-color: #e4eaf0;
+    box-shadow: 0 1px 0 rgba(26,74,122,.04);
+  }
+
+  /* Mobile menu */
+  .mobile-menu {
+    position: fixed; inset: 0; background: #fff; z-index: 100;
+    transform: translateX(100%); transition: transform .5s cubic-bezier(.22,1,.36,1);
+    display: flex; flex-direction: column; padding: 24px; overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .mobile-menu.is-open { transform: translateX(0); }
+  .mobile-menu-backdrop {
+    position: fixed; inset: 0; background: rgba(13,47,77,.4); backdrop-filter: blur(4px);
+    z-index: 99; opacity: 0; pointer-events: none; transition: opacity .4s ease;
+  }
+  .mobile-menu-backdrop.is-open { opacity: 1; pointer-events: auto; }
+  .mobile-menu a {
+    display: block; padding: 18px 0; border-bottom: 1px solid #e4eaf0;
+    font-size: 20px; font-weight: 600; color: #1a4a7a;
+    transition: color .3s ease, padding-left .3s ease;
+  }
+  .mobile-menu a:hover { color: #2b8bc9; padding-left: 6px; }
+  body.menu-open { overflow: hidden; }
+
+  .hamburger span {
+    display: block; width: 22px; height: 2px; background: #1a4a7a;
+    border-radius: 2px; transition: all .4s cubic-bezier(.22,1,.36,1);
+  }
+  .hamburger span + span { margin-top: 5px; }
+  .hamburger.is-open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .hamburger.is-open span:nth-child(2) { opacity: 0; }
+  .hamburger.is-open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+  /* Swiper */
+  .swiper-pagination-bullet {
+    width: 8px; height: 8px; background: #1a4a7a; opacity: .2;
+    transition: all .4s ease; margin: 0 4px !important;
+  }
+  .swiper-pagination-bullet-active {
+    opacity: 1; background: linear-gradient(120deg, #2b8bc9, #3aa76d);
+    width: 28px; border-radius: 4px;
+  }
+  .swiper-btn {
+    width: 44px; height: 44px;
+    border: 1px solid #e4eaf0; background: #fff;
+    display: inline-flex; align-items: center; justify-content: center;
+    transition: all .4s cubic-bezier(.22,1,.36,1);
+    cursor: pointer; border-radius: 8px; color: #1a4a7a; flex-shrink: 0;
+  }
+  @media (min-width: 768px) { .swiper-btn { width: 48px; height: 48px; } }
+  .swiper-btn:hover { background: #1a4a7a; border-color: #1a4a7a; color: #fff; }
+  .swiper-btn svg { transition: transform .4s cubic-bezier(.22,1,.36,1); }
+  .swiper-btn:hover svg { transform: translateX(2px); }
+  .swiper-btn.prev:hover svg { transform: translateX(-2px); }
+
+  .accent-dot {
+    display: inline-block; width: 6px; height: 6px; border-radius: 999px;
+    background: linear-gradient(120deg, #2b8bc9, #3aa76d); flex-shrink: 0;
+  }
+
+  /* Timeline */
+  .timeline { position: relative; padding-left: 40px; }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 7px; top: 8px; bottom: 8px; width: 2px;
+    background: linear-gradient(180deg, #2b8bc9 0%, #3aa76d 100%);
+    border-radius: 2px;
+  }
+  @media (min-width: 768px) {
+    .timeline { padding-left: 0; }
+    .timeline::before { left: 50%; transform: translateX(-50%); }
+  }
+  .timeline-node {
+    position: relative;
+    padding-left: 0;
+    padding-bottom: 48px;
+  }
+  .timeline-node:last-child { padding-bottom: 0; }
+  @media (min-width: 768px) {
+    .timeline-node { padding-bottom: 72px; }
+  }
+  .timeline-dot {
+    position: absolute;
+    left: -40px; top: 4px;
+    width: 16px; height: 16px;
+    border-radius: 999px;
+    background: #fff;
+    border: 2px solid #3aa76d;
+    box-shadow: 0 0 0 4px rgba(58,167,109,.15);
+    z-index: 2;
+  }
+  @media (min-width: 768px) {
+    .timeline-dot { left: 50%; transform: translateX(-50%); }
+  }
+  .timeline-content {
+    position: relative;
+  }
+  @media (min-width: 768px) {
+    .timeline-node:nth-child(odd) .timeline-content {
+      width: 50%;
+      padding-right: 56px;
+      text-align: right;
+    }
+    .timeline-node:nth-child(even) .timeline-content {
+      width: 50%;
+      margin-left: 50%;
+      padding-left: 56px;
+      text-align: left;
+    }
+  }
+
+  .reveal {
+    opacity: 0; transform: translateY(24px);
+    transition: opacity 1s cubic-bezier(.22,1,.36,1), transform 1s cubic-bezier(.22,1,.36,1);
+  }
+  .reveal.is-in { opacity: 1; transform: translateY(0); }
+  .reveal-delay-1 { transition-delay: .1s; }
+  .reveal-delay-2 { transition-delay: .2s; }
+  .reveal-delay-3 { transition-delay: .3s; }
+
+  body, html { overflow-x: hidden; max-width: 100vw; }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+    .reveal { opacity: 1 !important; transform: none !important; }
+  }
+</style>
+</head>
+
+<body class="bg-mist text-navy font-sans">
+
+<!-- ============ TOP BAR ============ -->
+<div class="bg-navy text-white/85">
+  <div class="max-w-[1280px] mx-auto px-4 xs:px-5 sm:px-6 lg:px-10 py-2.5 flex items-center justify-between gap-4">
+    <p class="micro text-white/75 truncate">Free delivery · Orders above ₦50,000</p>
+    <div class="hidden sm:flex items-center gap-6 lg:gap-8 shrink-0">
+      <a href="#" class="micro text-white/75 hover:text-white transition">Journal</a>
+      <a href="#" class="micro text-white/75 hover:text-white transition">Support</a>
+    </div>
+  </div>
+</div>
+
+<!-- ============ NAVBAR ============ -->
+<header id="nav" class="bg-white/80 backdrop-blur-md sticky top-0 z-50 border-b border-transparent transition-all duration-500">
+  <div class="max-w-[1280px] mx-auto px-4 xs:px-5 sm:px-6 lg:px-10 flex items-center justify-between h-[72px] sm:h-[80px] lg:h-[84px] gap-4">
+
+    <a href="index.html" class="flex items-center gap-2.5 sm:gap-3 group shrink-0 min-w-0">
+      <svg viewBox="0 0 100 100" class="w-8 h-8 sm:w-9 sm:h-9 lg:w-10 lg:h-10 transition-transform duration-700 group-hover:rotate-[6deg] shrink-0">
+        <defs>
+          <linearGradient id="hb" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#2b8bc9"/>
+            <stop offset="100%" stop-color="#3aa76d"/>
+          </linearGradient>
+        </defs>
+        <path d="M38 8 h24 a6 6 0 0 1 6 6 v18 h18 a6 6 0 0 1 6 6 v24 a6 6 0 0 1 -6 6 H68 v18 a6 6 0 0 1 -6 6 H38 a6 6 0 0 1 -6 -6 V68 H14 a6 6 0 0 1 -6 -6 V38 a6 6 0 0 1 6 -6 h18 V14 a6 6 0 0 1 6 -6 z" fill="url(#hb)"/>
+        <circle cx="50" cy="34" r="6" fill="white"/>
+        <path d="M32 44 Q40 40 46 46 M68 44 Q60 40 54 46" stroke="white" stroke-width="4" stroke-linecap="round" fill="none"/>
+        <path d="M44 60 Q58 52 66 62 Q64 74 50 74 Q44 68 44 60 z" fill="#7fc341"/>
+      </svg>
+      <div class="leading-none min-w-0">
+        <div class="text-[18px] sm:text-[20px] lg:text-[24px] font-extrabold tracking-tight whitespace-nowrap">
+          <span class="text-navy">Health</span><span class="text-green">Buddy</span>
+        </div>
+        <div class="micro text-slate mt-1 hidden xs:block" style="font-size:8.5px;">Better Health · Happier You</div>
+      </div>
+    </a>
+
+    <nav class="hidden md:flex items-center gap-6 lg:gap-10 text-[14px] font-medium text-slate">
+      <a href="shop.html" class="hover-underline hover:text-navy transition">Shop</a>
+      <a href="consult.html" class="hover-underline hover:text-navy transition">Consult</a>
+      <a href="#" class="hover-underline hover:text-navy transition">Practitioners</a>
+      <a href="about.html" class="text-navy hover-underline">About</a>
+      <a href="contact.html" class="hover-underline hover:text-navy transition hidden lg:inline">Contact</a>
+    </nav>
+
+    <div class="flex items-center gap-2 sm:gap-4 shrink-0">
+      <a href="#" class="hidden lg:inline text-[14px] text-slate hover:text-navy font-medium transition">Sign in</a>
+
+      <a href="cart.html" class="relative p-2 text-slate hover:text-navy transition" aria-label="Cart">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5M4.5 8.25h15l-1.2 12a1.5 1.5 0 01-1.5 1.35H6.2a1.5 1.5 0 01-1.5-1.35L3.5 8.25h.995z"/>
+        </svg>
+        <span class="absolute top-1 right-1 w-3.5 h-3.5 bg-gradient-to-br from-blue to-green text-white text-[8px] font-bold rounded-full flex items-center justify-center">2</span>
+      </a>
+
+      <a href="consult.html" class="hidden md:inline-flex btn-primary px-4 lg:px-5 py-2.5 text-[13px] font-semibold items-center">
+        Book Consultation
+      </a>
+
+      <button id="menuBtn" class="hamburger md:hidden p-2.5 -mr-2" aria-label="Open menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- ============ MOBILE MENU ============ -->
+<div id="menuBackdrop" class="mobile-menu-backdrop md:hidden"></div>
+<div id="mobileMenu" class="mobile-menu md:hidden">
+  <div class="flex items-center justify-between mb-8 pb-6 border-b border-line">
+    <div class="flex items-center gap-3">
+      <svg viewBox="0 0 100 100" class="w-9 h-9">
+        <defs>
+          <linearGradient id="hb-menu" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#2b8bc9"/>
+            <stop offset="100%" stop-color="#3aa76d"/>
+          </linearGradient>
+        </defs>
+        <path d="M38 8 h24 a6 6 0 0 1 6 6 v18 h18 a6 6 0 0 1 6 6 v24 a6 6 0 0 1 -6 6 H68 v18 a6 6 0 0 1 -6 6 H38 a6 6 0 0 1 -6 -6 V68 H14 a6 6 0 0 1 -6 -6 V38 a6 6 0 0 1 6 -6 h18 V14 a6 6 0 0 1 6 -6 z" fill="url(#hb-menu)"/>
+        <circle cx="50" cy="34" r="6" fill="white"/>
+        <path d="M32 44 Q40 40 46 46 M68 44 Q60 40 54 46" stroke="white" stroke-width="4" stroke-linecap="round" fill="none"/>
+        <path d="M44 60 Q58 52 66 62 Q64 74 50 74 Q44 68 44 60 z" fill="#7fc341"/>
+      </svg>
+      <div class="text-[20px] font-extrabold">
+        <span class="text-navy">Health</span><span class="text-green">Buddy</span>
+      </div>
+    </div>
+    <button id="closeBtn" class="p-2 -mr-2" aria-label="Close menu">
+      <svg class="w-6 h-6 text-navy" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+    </button>
+  </div>
+
+  <nav class="flex-1">
+    <a href="shop.html">Shop</a>
+    <a href="consult.html">Consult</a>
+    <a href="#">Practitioners</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
+    <a href="#">Sign in</a>
+  </nav>
+
+  <div class="mt-8 pt-6 border-t border-line space-y-3">
+    <a href="shop.html" class="block w-full text-center btn-outline py-3.5 font-semibold text-[14px]">Shop Products</a>
+    <a href="consult.html" class="block w-full text-center btn-primary py-3.5 font-semibold text-[14px]">Book Consultation</a>
+  </div>
+
+  <p class="micro text-slate mt-8 text-center">Better Health · Happier You</p>
+</div>
+
+<!-- ============ PAGE HEADER ============ -->
+<section class="bg-white border-b border-line">
+  <div class="max-w-[1280px] mx-auto px-4 xs:px-5 sm:px-6 lg:px-10 pt-8 sm:pt-10 lg:pt-14 pb-10 sm:pb-12 lg:pb-16">
+
+    <nav class="flex items-center gap-2 text-[12px] sm:text-[13px] text-slate mb-5 sm:mb-6">
+      <a href="index.html" class="hover:text-navy transition">Home</a>
+      <span class="text-slate/50">/</span>
+      <span class="text-navy font-medium">About</span>
+    </nav>
+
+    <div class="max-w-3xl">
+      <div class="inline-flex items-center gap-2.5 mb-4 sm:mb-5">
+        <span class="accent-dot"></span>
+        <span class="micro text-green">Our Story</span>
+      </div>
+      <h1 class="display-lg text-navy mb-5 sm:mb-6">
+        Healthcare, the way it<br class="hidden sm:block"/>
+        <span class="gradient-text">should feel.</span>
+      </h1>
+      <p class="text-slate text-[15px] sm:text-[16px] lg:text-[18px] leading-[1.75] font-light">
+        HealthBuddy was built on a simple conviction — that trusted health products and expert advice should be accessible, personal, and honest. We're a small team from Lagos, working to make that real.
+      </p>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============ FOUNDING STORY ============ -->
+<section class="bg-white border-b border-line">
+  <div class="max-w-[1280px] mx-auto px-4 xs:px-5 sm:px-6 lg:px-10 py-14 sm:py-16 lg:py-24">
+    <div class="grid md:grid-cols-12 gap-10 md:gap-14 lg:gap-20 items-center">
+
+      <div class="md:col-span-6 reveal">
+        <div class="aspect-[4/5] sm:aspect-[5/6] md:aspect-[4/5] rounded-2xl overflow-hidden img-zoom shadow-[0_20px_60px_-20px_rgba(26,74,122,.25)]">
+          <img src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=1200" class="w-full h-full object-cover" alt="HealthBuddy story"/>
+        </div>
+      </div>
+
+      <div class="md:col-span-6 reveal reveal-delay-1">
+        <div class="inline-flex items-center gap-2.5 mb-4 sm:mb-5">
+          <span class="accent-dot"></span>
+          <span class="micro text-green">Where We Began</span>
+        </div>
+
+        <h2 class="display-md text-navy mb-6 sm:mb-7">
+          A quiet frustration<br/>
+          turned into a promise.
+        </h2>
+
+        <div class="space-y-5 text-slate text-[15px] sm:text-[16px] leading-[1.85] font-light">
+          <p>
+            In 2024, our founder spent weeks trying to find a reliable supplement and a doctor willing to answer basic questions. She found neither — until she pieced together answers from strangers on the internet.
+          </p>
+          <p>
+            That experience became HealthBuddy. A place where every product is verified, every practitioner is licensed, and every conversation starts with listening.
+          </p>
+          <p class="text-navy font-medium italic">
+            We believe good health isn't a luxury. It's a foundation.
+          </p>
+        </div>
+
+        <!-- Signature -->
+        <div class="mt-10 pt-8 rule flex items-center gap-4">
+          <div class="w-12 h-12 rounded-full gradient-brand flex items-center justify-center text-white font-bold text-[15px] shrink-0">AB</div>
+          <div>
+            <p class="text-[14px] sm:text-[15px] font-bold text-navy">Adaeze Bankole</p>
+            <p class="micro text-slate mt-1">Founder & CEO</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============ VALUES ============ -->
+<section class="bg-mist border-b border-line">
+  <div class="max-w-[1280px] mx-auto px-4 xs:px-5 sm:px-6 lg:px-10 py-14 sm:py-16 lg:py-24">
+
+    <div class="text-center max-w-2xl mx-auto mb-10 sm:mb-12 lg:mb-16 reveal">
+      <div class="inline-flex items-center gap-2.5 mb-4 sm:mb-5">
+        <span class="accent-dot"></span>
+        <span class="micro text-green">Our Values</span>
+        <span class="accent-dot"></span>
+      </div>
+      <h2 class="display-md text-navy">
+        Four principles that<br class="hidden sm:block"/> guide every choice.
+      </h2>
+    </div>
+
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6">
+
+      <div class="bg-white rounded-2xl border border-line p-6 sm:p-7 hover:border-navy/20 hover:shadow-[0_20px_50px_-20px_rgba(26,74,122,.18)] transition-all duration-500 reveal">
+        <div class="w-12 h-12 rounded-xl gradient-brand flex items-center justify-center text-white mb-5">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        </div>
+        <h3 class="text-[17px] font-bold text-navy mb-3">Verified First</h3>
+        <p class="text-slate text-[14px] leading-[1.7]">
+          Every product is NAFDAC-certified; every practitioner is licensed and vetted.
+        </p>
+      </div>
+
+      <div class="bg-white rounded-2xl border border-line p-6 sm:p-7 hover:border-navy/20 hover:shadow-[0_20px_50px_-20px_rgba(26,74,122,.18)] transition-all duration-500 reveal reveal-delay-1">
+        <div class="w-12 h-12 rounded-xl gradient-brand flex items-center justify-center text-white mb-5">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"/></svg>
+        </div>
+        <h3 class="text-[17px] font-bold text-navy mb-3">Genuinely Human</h3>
+        <p class="text-slate text-[14px] leading-[1.7]">
+          Real people on every call. No scripts, no rushing. Care at your pace.
+        </p>
+      </div>
+
+      <div class="bg-white rounded-2xl border border-line p-6 sm:p-7 hover:border-navy/20 hover:shadow-[0_20px_50px_-20px_rgba(26,74,122,.18)] transition-all duration-500 reveal reveal-delay-2">
+        <div class="w-12 h-12 rounded-xl gradient-brand flex items-center justify-center text-white mb-5">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z"/></svg>
+        </div>
+        <h3 class="text-[17px] font-bold text-navy mb-3">Privacy Always</h3>
+        <p class="text-slate text-[14px] leading-[1.7]">
+          Your data belongs to you. Encrypted conversations, no resale, no tracking.
+        </p>
+      </div>
+
+      <div class="bg-white rounded-2xl border border-line p-6 sm:p-7 hover:border-navy/20 hover:shadow-[0_20px_50px_-20px_rgba(26,74,122,.18)] transition-all duration-500 reveal reveal-delay-3">
+        <div class="w-12 h-12 rounded-xl gradient-brand flex items-center justify-center text-white mb-5">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0112 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 013 12c0-1.605.42-3.113 1.157-4.418"/></svg>
+        </div>
+        <h3 class="text-[17px] font-bold text-navy mb-3">Nationwide Access</h3>
+        <p class="text-slate text-[14px] leading-[1.7]">
+          From Lagos to Kano — same quality, same care, wherever you are.
+        </p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============ TEAM (SWIPER) ============ -->
+<section class="bg-white border-b border-line overflow-hidden">
+  <div class="max-w-[1280px] mx-auto px-4 xs:px-5 sm:px-6 lg:px-10 py-14 sm:py-16 lg:py-24">
+
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 sm:gap-8 mb-10 sm:mb-12 lg:mb-14 reveal">
+      <div class="max-w-lg">
+        <div class="inline-flex items-center gap-2.5 mb-4 sm:mb-5">
+          <span class="accent-dot"></span>
+          <span class="micro text-green">The Team</span>
+        </div>
+        <h2 class="display-md text-navy">
+          Small team, big conviction.
+        </h2>
+      </div>
+      <div class="flex items-center gap-3 self-start md:self-auto">
+        <div class="swiper-btn prev team-prev">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+        </div>
+        <div class="swiper-btn team-next">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+        </div>
+      </div>
+    </div>
+
+    <div class="swiper teamSwiper reveal reveal-delay-1">
+      <div class="swiper-wrapper pb-2">
+
+        <div class="swiper-slide h-auto">
+          <div class="bg-mist rounded-xl sm:rounded-2xl overflow-hidden border border-line h-full">
+            <div class="aspect-[4/5] overflow-hidden">
+              <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=600" class="w-full h-full object-cover" alt="Team member"/>
+            </div>
+            <div class="p-5">
+              <p class="micro text-blue mb-2">Founder & CEO</p>
+              <h3 class="text-[17px] font-bold text-navy mb-2">Adaeze Bankole</h3>
+              <p class="text-slate text-[13px] leading-[1.7]">
+                Former product lead with ten years across health and consumer tech.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="swiper-slide h-auto">
+          <div class="bg-mist rounded-xl sm:rounded-2xl overflow-hidden border border-line h-full">
+            <div class="aspect-[4/5] overflow-hidden">
+              <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=600" class="w-full h-full object-cover" alt="Team member"/>
+            </div>
+            <div class="p-5">
+              <p class="micro text-blue mb-2">Chief Medical Officer</p>
+              <h3 class="text-[17px] font-bold text-navy mb-2">Dr. Femi Adeyemi</h3>
+              <p class="text-slate text-[13px] leading-[1.7]">
+                Consultant cardiologist overseeing clinical quality across the platform.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="swiper-slide h-auto">
+          <div class="bg-mist rounded-xl sm:rounded-2xl overflow-hidden border border-line h-full">
+            <div class="aspect-[4/5] overflow-hidden">
+              <img src="https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=600" class="w-full h-full object-cover" alt="Team member"/>
+            </div>
+            <div class="p-5">
+              <p class="micro text-blue mb-2">Head of Care</p>
+              <h3 class="text-[17px] font-bold text-navy mb-2">Kemi Oladipo</h3>
+              <p class="text-slate text-[13px] leading-[1.7]">
+                Leads our practitioner network and clinical experience.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="swiper-slide h-auto">
+          <div class="bg-mist rounded-xl sm:rounded-2xl overflow-hidden border border-line h-full">
+            <div class="aspect-[4/5] overflow-hidden">
+              <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600" class="w-full h-full object-cover" alt="Team member"/>
+            </div>
+            <div class="p-5">
+              <p class="micro text-blue mb-2">Head of Product</p>
+              <h3 class="text-[17px] font-bold text-navy mb-2">Chidi Nwosu</h3>
+              <p class="text-slate text-[13px] leading-[1.7]">
+                Builds the tools our practitioners and customers use daily.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="swiper-slide h-auto">
+          <div class="bg-mist rounded-xl sm:rounded-2xl overflow-hidden border border-line h-full">
+            <div class="aspect-[4/5] overflow-hidden">
+              <img src="https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=600" class="w-full h-full object-cover" alt="Team member"/>
+            </div>
+            <div class="p-5">
+              <p class="micro text-blue mb-2">Head of Supply</p>
+              <h3 class="text-[17px] font-bold text-navy mb-2">Ngozi Okafor</h3>
+              <p class="text-slate text-[13px] leading-[1.7]">
+                Sources and verifies every product we bring to market.
+              </p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TIMELINE ============ -->
+<section class="bg-mist border-b border-line">
+  <div class="max-w-[1280px] mx-auto px-4 xs:px-5 sm:px-6 lg:px-10 py-14 sm:py-16 lg:py-24">
+
+    <div class="text-center max-w-2xl mx-auto mb-12 sm:mb-14 lg:mb-20 reveal">
+      <div class="inline-flex items-center gap-2.5 mb-4 sm:mb-5">
+        <span class="accent-dot"></span>
+        <span class="micro text-green">Milestones</span>
+        <span class="accent-dot"></span>
+      </div>
+      <h2 class="display-md text-navy">How we got here.</h2>
+    </div>
+
+    <div class="timeline max-w-3xl mx-auto">
+
+      <div class="timeline-node reveal">
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <p class="micro text-green mb-2">2024 · Q1</p>
+          <h3 class="text-[17px] sm:text-[18px] font-bold text-navy mb-2">The idea</h3>
+          <p class="text-slate text-[13px] sm:text-[14px] leading-[1.7]">Born from a frustration that too many Nigerians face — finding trusted health products and honest advice.</p>
+        </div>
+      </div>
+
+      <div class="timeline-node reveal">
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <p class="micro text-green mb-2">2024 · Q3</p>
+          <h3 class="text-[17px] sm:text-[18px] font-bold text-navy mb-2">First 25 practitioners</h3>
+          <p class="text-slate text-[13px] sm:text-[14px] leading-[1.7]">We vetted and onboarded our first cohort of licensed doctors and specialists.</p>
+        </div>
+      </div>
+
+      <div class="timeline-node reveal">
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <p class="micro text-green mb-2">2025 · Q1</p>
+          <h3 class="text-[17px] sm:text-[18px] font-bold text-navy mb-2">10,000 clients</h3>
+          <p class="text-slate text-[13px] sm:text-[14px] leading-[1.7]">Crossed our first major milestone, still at 4.9 average rating across every consultation.</p>
+        </div>
+      </div>
+
+      <div class="timeline-node reveal">
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <p class="micro text-green mb-2">2026 · Today</p>
+          <h3 class="text-[17px] sm:text-[18px] font-bold text-navy mb-2">Nationwide delivery</h3>
+          <p class="text-slate text-[13px] sm:text-[14px] leading-[1.7]">Now serving all 36 states plus FCT, with same-week consultations and 24h dispatch.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============ STATS BAND ============ -->
+<section class="bg-tint border-b border-line">
+  <div class="max-w-[1280px] mx-auto px-4 xs:px-5 sm:px-6 lg:px-10 py-12 sm:py-14 lg:py-16">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-y-8 gap-x-4 sm:gap-8 reveal">
+      <div class="text-center">
+        <p class="display-md gradient-text">10k+</p>
+        <p class="micro text-slate mt-2">Clients Served</p>
+      </div>
+      <div class="text-center md:border-l border-line">
+        <p class="display-md gradient-text">25</p>
+        <p class="micro text-slate mt-2">Practitioners</p>
+      </div>
+      <div class="text-center md:border-l border-line">
+        <p class="display-md gradient-text">4.9</p>
+        <p class="micro text-slate mt-2">Average Rating</p>
+      </div>
+      <div class="text-center md:border-l border-line">
+        <p class="display-md gradient-text">36+</p>
+        <p class="micro text-slate mt-2">States Covered</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CTA BAND ============ -->
+<section class="gradient-brand relative overflow-hidden">
+  <div class="absolute inset-0 opacity-[0.14]">
+    <svg class="w-full h-full" viewBox="0 0 1200 400" preserveAspectRatio="none">
+      <circle cx="1000" cy="100" r="240" fill="white"/>
+      <circle cx="150" cy="350" r="180" fill="white"/>
+    </svg>
+  </div>
+
+  <div class="relative max-w-[1280px] mx-auto px-4 xs:px-5 sm:px-6 lg:px-10 py-14 sm:py-16 lg:py-20">
+    <div class="max-w-2xl mx-auto text-center reveal">
+      <h2 class="display-md text-white mb-5 sm:mb-6">
+        Ready to feel your best?
+      </h2>
+      <p class="text-white/85 text-[15px] sm:text-[16px] leading-[1.75] mb-8 sm:mb-10 max-w-lg mx-auto">
+        Start with a consultation, or browse the collection. Either way, we're here.
+      </p>
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
+        <a href="consult.html" class="btn-light w-full sm:w-auto px-7 py-4 text-[14px] font-bold inline-flex items-center justify-center gap-2">
+          Book Consultation
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+        </a>
+        <a href="shop.html" class="w-full sm:w-auto text-center text-white/85 hover:text-white text-[13px] font-semibold py-3 transition">
+          Or shop products
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer class="bg-deep text-white">
+  <div class="max-w-[1280px] mx-auto px-4 xs:px-5 sm:px-6 lg:px-10 py-14 sm:py-16 lg:py-20">
+
+    <div class="grid grid-cols-2 md:grid-cols-12 gap-y-10 gap-x-6 md:gap-12 pb-12 sm:pb-14 border-b border-white/10">
+
+      <div class="col-span-2 md:col-span-5">
+        <div class="flex items-center gap-3 mb-5 sm:mb-6">
+          <svg viewBox="0 0 100 100" class="w-9 h-9 sm:w-10 sm:h-10">
+            <defs>
+              <linearGradient id="hb-footer" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#2b8bc9"/>
+                <stop offset="100%" stop-color="#3aa76d"/>
+              </linearGradient>
+            </defs>
+            <path d="M38 8 h24 a6 6 0 0 1 6 6 v18 h18 a6 6 0 0 1 6 6 v24 a6 6 0 0 1 -6 6 H68 v18 a6 6 0 0 1 -6 6 H38 a6 6 0 0 1 -6 -6 V68 H14 a6 6 0 0 1 -6 -6 V38 a6 6 0 0 1 6 -6 h18 V14 a6 6 0 0 1 6 -6 z" fill="url(#hb-footer)"/>
+            <circle cx="50" cy="34" r="6" fill="#0d2f4d"/>
+            <path d="M32 44 Q40 40 46 46 M68 44 Q60 40 54 46" stroke="#0d2f4d" stroke-width="4" stroke-linecap="round" fill="none"/>
+            <path d="M44 60 Q58 52 66 62 Q64 74 50 74 Q44 68 44 60 z" fill="#7fc341"/>
+          </svg>
+          <div>
+            <div class="text-[20px] sm:text-[22px] font-extrabold">
+              <span class="text-white">Health</span><span class="text-lime">Buddy</span>
+            </div>
+            <div class="micro text-white/40 mt-1.5" style="font-size:8.5px;">Better Health · Happier You</div>
+          </div>
+        </div>
+        <p class="text-[13px] sm:text-[14px] leading-[1.8] text-white/60 max-w-[380px]">
+          Considered health, expertly delivered. Lagos, Nigeria — serving clients nationwide.
+        </p>
+      </div>
+
+      <div class="md:col-span-2 md:col-start-7">
+        <p class="micro text-white/40 mb-4 sm:mb-5">Shop</p>
+        <ul class="space-y-3 sm:space-y-3.5 text-[13px] sm:text-[14px]">
+          <li><a href="shop.html" class="text-white/70 hover:text-white transition">All Products</a></li>
+          <li><a href="#" class="text-white/70 hover:text-white transition">Supplements</a></li>
+          <li><a href="#" class="text-white/70 hover:text-white transition">Wellness</a></li>
+        </ul>
+      </div>
+
+      <div class="md:col-span-2">
+        <p class="micro text-white/40 mb-4 sm:mb-5">Company</p>
+        <ul class="space-y-3 sm:space-y-3.5 text-[13px] sm:text-[14px]">
+          <li><a href="about.html" class="text-white/70 hover:text-white transition">About</a></li>
+          <li><a href="contact.html" class="text-white/70 hover:text-white transition">Contact</a></li>
+          <li><a href="#" class="text-white/70 hover:text-white transition">Journal</a></li>
+        </ul>
+      </div>
+
+      <div class="col-span-2 md:col-span-2">
+        <p class="micro text-white/40 mb-4 sm:mb-5">Contact</p>
+        <ul class="space-y-3 sm:space-y-3.5 text-[13px] sm:text-[14px]">
+          <li><a href="mailto:hello@healthbuddy.ng" class="text-white/70 hover:text-white transition break-all">hello@healthbuddy.ng</a></li>
+          <li><a href="#" class="text-white/70 hover:text-white transition">+234 · Lagos</a></li>
+          <li><a href="#" class="text-white/70 hover:text-white transition">Instagram</a></li>
+        </ul>
+      </div>
+
+    </div>
+
+    <div class="pt-6 sm:pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 sm:gap-6 text-center sm:text-left">
+      <p class="micro text-white/40">© 2026 HealthBuddy — All rights reserved</p>
+      <div class="flex flex-wrap justify-center gap-x-6 gap-y-2 sm:gap-8">
+        <a href="#" class="micro text-white/40 hover:text-white transition">Privacy</a>
+        <a href="#" class="micro text-white/40 hover:text-white transition">Terms</a>
+        <a href="#" class="micro text-white/40 hover:text-white transition">Disclaimer</a>
+      </div>
+    </div>
+
+  </div>
+</footer>
+
+<!-- ============ SCRIPTS ============ -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+<script>
+  /* Mobile menu */
+  const menuBtn = document.getElementById('menuBtn');
+  const closeBtn = document.getElementById('closeBtn');
+  const mobileMenu = document.getElementById('mobileMenu');
+  const backdrop = document.getElementById('menuBackdrop');
+
+  function openMenu() {
+    mobileMenu.classList.add('is-open');
+    backdrop.classList.add('is-open');
+    menuBtn.classList.add('is-open');
+    document.body.classList.add('menu-open');
+  }
+  function closeMenu() {
+    mobileMenu.classList.remove('is-open');
+    backdrop.classList.remove('is-open');
+    menuBtn.classList.remove('is-open');
+    document.body.classList.remove('menu-open');
+  }
+  menuBtn.addEventListener('click', () => {
+    mobileMenu.classList.contains('is-open') ? closeMenu() : openMenu();
+  });
+  closeBtn.addEventListener('click', closeMenu);
+  backdrop.addEventListener('click', closeMenu);
+  mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMenu));
+
+  /* Team Swiper */
+  new Swiper('.teamSwiper', {
+    slidesPerView: 1.15,
+    spaceBetween: 16,
+    speed: 800,
+    grabCursor: true,
+    navigation: { nextEl: '.team-next', prevEl: '.team-prev' },
+    breakpoints: {
+      480:  { slidesPerView: 1.6, spaceBetween: 16 },
+      640:  { slidesPerView: 2,   spaceBetween: 20 },
+      1024: { slidesPerView: 3,   spaceBetween: 24 },
+      1280: { slidesPerView: 4,   spaceBetween: 24 }
+    }
+  });
+
+  /* Scroll reveal */
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-in');
+        io.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  /* Nav scroll */
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('nav-scrolled', window.scrollY > 30);
+  }, { passive: true });
+
+  /* Resize */
+  window.addEventListener('resize', () => {
+    if (window.innerWidth >= 768 && mobileMenu.classList.contains('is-open')) closeMenu();
+  });
+</script>
+
+</body>
+</html>
